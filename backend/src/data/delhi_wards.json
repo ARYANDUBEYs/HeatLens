@@ -1,0 +1,645 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "city": "Delhi NCR, India",
+    "baseline_temp": 38.0,
+    "average_aqi": 265,
+    "satellite_source": "Landsat-9 TIRS & Sentinel-2 MSI (10m Res)",
+    "aqi_source": "CPCB CAAQMS Real-Time Grid",
+    "last_updated": "2026-08-31T20:00:00+05:30"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "DEL_01",
+      "properties": {
+        "ward_id": "DEL_01",
+        "ward_name": "Seelampur & Jaffrabad",
+        "zone": "North-East Delhi",
+        "population": 182400,
+        "area_sqkm": 3.8,
+        "lst_temp_c": 45.2,
+        "air_temp_c": 41.5,
+        "ndvi_vegetation": 0.08,
+        "aqi_pm25": 395,
+        "aqi_status": "Severe",
+        "informal_settlement_pct": 74.5,
+        "tin_roof_coverage_pct": 68.2,
+        "pvd_priority_score": 94.8,
+        "risk_category": "CRITICAL_RED",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 7.4,
+          "aqi_diff": 140,
+          "tree_cover_diff_pct": -42.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "COOL_ROOF_PAINT",
+            "target_units": "14,500 tin-roof dwellings",
+            "cost_estimate_inr": "\u20b929 Lakhs",
+            "estimated_cooling_c": "-2.8\u00b0C indoor reduction",
+            "priority": "IMMEDIATE"
+          },
+          {
+            "action_type": "DRINKING_WATER_KIOSK",
+            "target_units": "12 solar-cooled water stations",
+            "cost_estimate_inr": "\u20b915 Lakhs",
+            "priority": "HIGH"
+          },
+          {
+            "action_type": "MICRO_FOREST_CANOPY",
+            "target_units": "Miyawaki urban pockets along drains",
+            "cost_estimate_inr": "\u20b918 Lakhs",
+            "priority": "MEDIUM_TERM"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.26,
+              28.665
+            ],
+            [
+              77.285,
+              28.672
+            ],
+            [
+              77.288,
+              28.655
+            ],
+            [
+              77.265,
+              28.648
+            ],
+            [
+              77.26,
+              28.665
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_02",
+      "properties": {
+        "ward_id": "DEL_02",
+        "ward_name": "Anand Vihar & Kaushambi Border",
+        "zone": "East Delhi",
+        "population": 145000,
+        "area_sqkm": 5.2,
+        "lst_temp_c": 44.8,
+        "air_temp_c": 41.0,
+        "ndvi_vegetation": 0.12,
+        "aqi_pm25": 412,
+        "aqi_status": "Severe",
+        "informal_settlement_pct": 52.0,
+        "tin_roof_coverage_pct": 46.5,
+        "pvd_priority_score": 91.2,
+        "risk_category": "CRITICAL_RED",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 6.8,
+          "aqi_diff": 160,
+          "tree_cover_diff_pct": -35.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "MISTING_CANOPIES",
+            "target_units": "ISBT bus terminal & auto stands",
+            "cost_estimate_inr": "\u20b912 Lakhs",
+            "estimated_cooling_c": "-3.5\u00b0C ambient relief",
+            "priority": "IMMEDIATE"
+          },
+          {
+            "action_type": "COOL_ROOFS",
+            "target_units": "8,200 commercial & residential units",
+            "cost_estimate_inr": "\u20b918 Lakhs",
+            "priority": "HIGH"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.295,
+              28.645
+            ],
+            [
+              77.325,
+              28.655
+            ],
+            [
+              77.33,
+              28.635
+            ],
+            [
+              77.3,
+              28.625
+            ],
+            [
+              77.295,
+              28.645
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_03",
+      "properties": {
+        "ward_id": "DEL_03",
+        "ward_name": "Okhla Industrial Cluster & Tehkhand",
+        "zone": "South-East Delhi",
+        "population": 165000,
+        "area_sqkm": 6.5,
+        "lst_temp_c": 44.2,
+        "air_temp_c": 40.8,
+        "ndvi_vegetation": 0.11,
+        "aqi_pm25": 378,
+        "aqi_status": "Very Poor",
+        "informal_settlement_pct": 62.0,
+        "tin_roof_coverage_pct": 59.0,
+        "pvd_priority_score": 88.5,
+        "risk_category": "HIGH_ORANGE",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 6.2,
+          "aqi_diff": 115,
+          "tree_cover_diff_pct": -38.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "WORKER_REST_CENTERS",
+            "target_units": "8 air-cooled hydration centers in Phase 1-3",
+            "cost_estimate_inr": "\u20b922 Lakhs",
+            "priority": "IMMEDIATE"
+          },
+          {
+            "action_type": "COOL_PAVEMENT_COATINGS",
+            "target_units": "14 km industrial link roads",
+            "cost_estimate_inr": "\u20b935 Lakhs",
+            "priority": "HIGH"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.26,
+              28.53
+            ],
+            [
+              77.295,
+              28.545
+            ],
+            [
+              77.305,
+              28.515
+            ],
+            [
+              77.265,
+              28.5
+            ],
+            [
+              77.26,
+              28.53
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_04",
+      "properties": {
+        "ward_id": "DEL_04",
+        "ward_name": "Bhalaswa & Jahangirpuri",
+        "zone": "North Delhi",
+        "population": 195000,
+        "area_sqkm": 7.1,
+        "lst_temp_c": 44.6,
+        "air_temp_c": 41.2,
+        "ndvi_vegetation": 0.1,
+        "aqi_pm25": 388,
+        "aqi_status": "Severe",
+        "informal_settlement_pct": 71.0,
+        "tin_roof_coverage_pct": 65.0,
+        "pvd_priority_score": 92.4,
+        "risk_category": "CRITICAL_RED",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 7.1,
+          "aqi_diff": 130,
+          "tree_cover_diff_pct": -40.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "BIO_BUFFER_GREENBELT",
+            "target_units": "5000 fast-growing shade trees around landfill",
+            "cost_estimate_inr": "\u20b925 Lakhs",
+            "priority": "HIGH"
+          },
+          {
+            "action_type": "COOL_ROOFS",
+            "target_units": "11,000 households in JJ clusters",
+            "cost_estimate_inr": "\u20b924 Lakhs",
+            "priority": "IMMEDIATE"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.15,
+              28.73
+            ],
+            [
+              77.185,
+              28.745
+            ],
+            [
+              77.195,
+              28.715
+            ],
+            [
+              77.155,
+              28.7
+            ],
+            [
+              77.15,
+              28.73
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_05",
+      "properties": {
+        "ward_id": "DEL_05",
+        "ward_name": "Karol Bagh Commercial Hub",
+        "zone": "Central-West Delhi",
+        "population": 128000,
+        "area_sqkm": 4.5,
+        "lst_temp_c": 41.5,
+        "air_temp_c": 39.2,
+        "ndvi_vegetation": 0.18,
+        "aqi_pm25": 290,
+        "aqi_status": "Poor",
+        "informal_settlement_pct": 28.0,
+        "tin_roof_coverage_pct": 24.0,
+        "pvd_priority_score": 72.3,
+        "risk_category": "MEDIUM_YELLOW",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 3.8,
+          "aqi_diff": 65,
+          "tree_cover_diff_pct": -18.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "GREEN_MARKET_SHADING",
+            "target_units": "Ajmal Khan Road shaded canopies",
+            "cost_estimate_inr": "\u20b916 Lakhs",
+            "priority": "MEDIUM"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.18,
+              28.65
+            ],
+            [
+              77.205,
+              28.66
+            ],
+            [
+              77.21,
+              28.638
+            ],
+            [
+              77.185,
+              28.63
+            ],
+            [
+              77.18,
+              28.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_06",
+      "properties": {
+        "ward_id": "DEL_06",
+        "ward_name": "Rohini Sector 15-18",
+        "zone": "North-West Delhi",
+        "population": 142000,
+        "area_sqkm": 6.8,
+        "lst_temp_c": 39.8,
+        "air_temp_c": 38.0,
+        "ndvi_vegetation": 0.28,
+        "aqi_pm25": 240,
+        "aqi_status": "Poor",
+        "informal_settlement_pct": 18.5,
+        "tin_roof_coverage_pct": 15.0,
+        "pvd_priority_score": 56.4,
+        "risk_category": "MODERATE_YELLOW",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 2.6,
+          "aqi_diff": 45,
+          "tree_cover_diff_pct": -12.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "ROOFTOP_SOLAR_REFLECTIVE",
+            "target_units": "District parks & community halls",
+            "cost_estimate_inr": "\u20b910 Lakhs",
+            "priority": "LOW"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.11,
+              28.71
+            ],
+            [
+              77.145,
+              28.725
+            ],
+            [
+              77.15,
+              28.695
+            ],
+            [
+              77.115,
+              28.685
+            ],
+            [
+              77.11,
+              28.71
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_07",
+      "properties": {
+        "ward_id": "DEL_07",
+        "ward_name": "Dwarka Sector 6-12",
+        "zone": "South-West Delhi",
+        "population": 178000,
+        "area_sqkm": 9.2,
+        "lst_temp_c": 38.2,
+        "air_temp_c": 37.0,
+        "ndvi_vegetation": 0.36,
+        "aqi_pm25": 195,
+        "aqi_status": "Moderate",
+        "informal_settlement_pct": 12.0,
+        "tin_roof_coverage_pct": 9.0,
+        "pvd_priority_score": 42.1,
+        "risk_category": "LOW_BLUE",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 1.9,
+          "aqi_diff": 30,
+          "tree_cover_diff_pct": -8.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "CANAL_CORRIDOR_GREENING",
+            "target_units": "Stormwater drains linear parks",
+            "cost_estimate_inr": "\u20b914 Lakhs",
+            "priority": "LOW"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.03,
+              28.59
+            ],
+            [
+              77.075,
+              28.605
+            ],
+            [
+              77.08,
+              28.565
+            ],
+            [
+              77.035,
+              28.55
+            ],
+            [
+              77.03,
+              28.59
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_08",
+      "properties": {
+        "ward_id": "DEL_08",
+        "ward_name": "Chanakyapuri & Lutyens Green Belt",
+        "zone": "New Delhi / Central",
+        "population": 62000,
+        "area_sqkm": 8.4,
+        "lst_temp_c": 34.6,
+        "air_temp_c": 34.0,
+        "ndvi_vegetation": 0.58,
+        "aqi_pm25": 110,
+        "aqi_status": "Moderate",
+        "informal_settlement_pct": 2.1,
+        "tin_roof_coverage_pct": 1.5,
+        "pvd_priority_score": 16.5,
+        "risk_category": "BENCHMARK_GREEN",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 0.4,
+          "aqi_diff": 10,
+          "tree_cover_diff_pct": 0.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "BENCHMARK_PRESERVATION",
+            "target_units": "Maintain 58% canopy density",
+            "cost_estimate_inr": "\u20b95 Lakhs",
+            "priority": "MONITORING"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.17,
+              28.595
+            ],
+            [
+              77.215,
+              28.61
+            ],
+            [
+              77.22,
+              28.575
+            ],
+            [
+              77.175,
+              28.565
+            ],
+            [
+              77.17,
+              28.595
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_09",
+      "properties": {
+        "ward_id": "DEL_09",
+        "ward_name": "Civil Lines Heritage & Ridge",
+        "zone": "Central-North Delhi",
+        "population": 78000,
+        "area_sqkm": 5.8,
+        "lst_temp_c": 35.4,
+        "air_temp_c": 34.8,
+        "ndvi_vegetation": 0.52,
+        "aqi_pm25": 135,
+        "aqi_status": "Moderate",
+        "informal_settlement_pct": 5.4,
+        "tin_roof_coverage_pct": 4.0,
+        "pvd_priority_score": 22.8,
+        "risk_category": "BENCHMARK_GREEN",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 0.8,
+          "aqi_diff": 15,
+          "tree_cover_diff_pct": -2.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "NORTH_RIDGE_CANOPY_PRESERVATION",
+            "target_units": "Native flora protection",
+            "cost_estimate_inr": "\u20b96 Lakhs",
+            "priority": "MONITORING"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.21,
+              28.69
+            ],
+            [
+              77.24,
+              28.7
+            ],
+            [
+              77.245,
+              28.67
+            ],
+            [
+              77.215,
+              28.66
+            ],
+            [
+              77.21,
+              28.69
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEL_10",
+      "properties": {
+        "ward_id": "DEL_10",
+        "ward_name": "Connaught Place Urban Core",
+        "zone": "New Delhi / Central",
+        "population": 48000,
+        "area_sqkm": 3.2,
+        "lst_temp_c": 40.2,
+        "air_temp_c": 38.5,
+        "ndvi_vegetation": 0.22,
+        "aqi_pm25": 260,
+        "aqi_status": "Poor",
+        "informal_settlement_pct": 8.0,
+        "tin_roof_coverage_pct": 5.0,
+        "pvd_priority_score": 61.8,
+        "risk_category": "MODERATE_YELLOW",
+        "formal_vs_informal_gap": {
+          "temp_diff_c": 2.2,
+          "aqi_diff": 40,
+          "tree_cover_diff_pct": -10.0
+        },
+        "recommended_hap_actions": [
+          {
+            "action_type": "COOL_CORRIDOR_WATER_FOUNTAINS",
+            "target_units": "Outer circle & Janpath pedestrian walkways",
+            "cost_estimate_inr": "\u20b914 Lakhs",
+            "priority": "MEDIUM"
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.21,
+              28.635
+            ],
+            [
+              77.23,
+              28.64
+            ],
+            [
+              77.235,
+              28.625
+            ],
+            [
+              77.215,
+              28.62
+            ],
+            [
+              77.21,
+              28.635
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+﻿{
+  "name": "heatlens-x402-backend",
+  "version": "1.0.0",
+  "description": "HeatLens: Autonomous Climate & Heat Equity Micro-Oracle powered by x402 on Algorand",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc"
+  },
+  "keywords": ["heatlens", "x402", "algorand", "climate-equity", "urban-heat-island", "gis", "oracle"],
+  "author": "Team eco builders (ABES Engineering College)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "@x402-avm/extensions": "^2.6.1",
+    "@x402/avm": "^2.12.0",
+    "@x402/core": "^2.12.0",
+    "@x402/hono": "^2.12.0",
+    "dotenv": "^16.4.7",
+    "hono": "^4.6.14"
+  }
+}
