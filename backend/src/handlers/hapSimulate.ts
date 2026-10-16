@@ -1,4 +1,4 @@
-﻿import type { Context } from 'hono';
+import type { Context } from 'hono';
 import fs from 'fs';
 import path from 'path';
 import { simulateHapIntervention } from '../services/hapEngine.js';
@@ -7,19 +7,37 @@ export async function handleHapSimulate(c: Context) {
   try {
     const body = await c.req.json().catch(() => ({}));
     const wardId = body.ward_id || 'DEL_01';
-    const budgetLakhs = Number(body.budget_inr_lakhs) || 25;
+    const budget = Number(body.budget_inr_lakhs || body.budget) || 25;
 
-    const dataPath = path.resolve('src/data/delhi_wards.json');
-    const rawData = fs.readFileSync(dataPath, 'utf-8');
-    const wardsGeoJSON = JSON.parse(rawData);
+    const isCanada = wardId.toUpperCase().startsWith('CAN');
+    const primaryFile = isCanada ? 'canadian_smog_corridor.json' : 'delhi_wards.json';
+    const secondaryFile = isCanada ? 'delhi_wards.json' : 'canadian_smog_corridor.json';
 
-    const ward = wardsGeoJSON.features.find((f: any) => f.properties.ward_id === wardId);
+    let ward: any = null;
 
-    if (!ward) {
-      return c.json({ success: false, error: `Ward with ID ${wardId} not found.` }, 404);
+    // Search primary dataset first
+    const primaryPath = path.resolve('src/data', primaryFile);
+    if (fs.existsSync(primaryPath)) {
+      const rawData = fs.readFileSync(primaryPath, 'utf-8');
+      const geoData = JSON.parse(rawData);
+      ward = geoData.features.find((f: any) => f.properties.ward_id === wardId);
     }
 
-    const simulation = simulateHapIntervention(ward, budgetLakhs);
+    // Fallback to secondary dataset
+    if (!ward) {
+      const secondaryPath = path.resolve('src/data', secondaryFile);
+      if (fs.existsSync(secondaryPath)) {
+        const rawData = fs.readFileSync(secondaryPath, 'utf-8');
+        const geoData = JSON.parse(rawData);
+        ward = geoData.features.find((f: any) => f.properties.ward_id === wardId);
+      }
+    }
+
+    if (!ward) {
+      return c.json({ success: false, error: `Ward or corridor region with ID '${wardId}' not found.` }, 404);
+    }
+
+    const simulation = simulateHapIntervention(ward, budget);
     const mockTxId = 'TX_HAP_' + Math.random().toString(36).substring(2, 12).toUpperCase();
 
     return c.json({
@@ -34,6 +52,6 @@ export async function handleHapSimulate(c: Context) {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    return c.json({ success: false, error: 'Failed to simulate HAP recommendations' }, 500);
+    return c.json({ success: false, error: 'Failed to simulate climate action recommendations' }, 500);
   }
 }

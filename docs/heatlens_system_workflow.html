@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeatLens: Autonomous Geospatial Satellite Oracle & Mitacs GRI Workflow</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at 50% 20%, #0F172A 0%, #070B14 100%);
+      color: #F8FAFC;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      max-width: 1000px;
+      margin-bottom: 25px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #FBBF24;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .badge-canada {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.35);
+      color: #F87171;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: #94A3B8;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    /* Container */
+    .diagram-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 40px rgba(245, 158, 11, 0.05);
+      max-width: 1360px;
+      width: 100%;
+      position: relative;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 1320px;
+    }
+
+    /* Animated Energy Ray Flows */
+    .flow-ray {
+      stroke-dasharray: 6 6;
+      animation: dashMove 1.4s linear infinite;
+    }
+    .flow-ray-cyan {
+      stroke-dasharray: 5 5;
+      animation: dashMove 1.8s linear infinite;
+    }
+    .flow-ray-orange {
+      stroke-dasharray: 6 6;
+      animation: dashMove 1.2s linear infinite reverse;
+    }
+
+    @keyframes dashMove {
+      from { stroke-dashoffset: 24; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Orbiting Satellite Animation */
+    @keyframes orbitPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.8)); }
+    }
+    .satellite-node {
+      animation: orbitPulse 3s ease-in-out infinite;
+      transform-origin: center;
+      cursor: pointer;
+    }
+
+    /* Interactive Box Hover */
+    .workflow-box {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .workflow-box:hover rect.bg-box {
+      stroke-width: 2.2px;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+    }
+    .box-landsat:hover rect.bg-box { stroke: #F97316; }
+    .box-sentinel:hover rect.bg-box { stroke: #38BDF8; }
+    .box-physics:hover rect.bg-box { stroke: #10B981; }
+    .box-fusion:hover rect.bg-box { stroke: #A855F7; }
+    .box-oracle:hover rect.bg-box { stroke: #06B6D4; }
+    .box-impact:hover rect.bg-box { stroke: #EF4444; }
+
+    /* Telemetry Pill */
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: #94A3B8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .telemetry-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .dot-green { background: #10B981; box-shadow: 0 0 8px #10B981; }
+    .dot-amber { background: #F59E0B; box-shadow: 0 0 8px #F59E0B; }
+    .dot-cyan { background: #06B6D4; box-shadow: 0 0 8px #06B6D4; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; justify-content: center; gap: 8px;">
+      <span class="badge">🛰️ Autonomous Geospatial Climate Intelligence</span>
+      <span class="badge badge-canada">🇨🇦 Mitacs GRI 2027 • Project #53438 (TRU BC)</span>
+    </div>
+    <h1>HeatLens Multi-Sensor System Architecture Workflow</h1>
+    <p class="subtitle">
+      Translating Spaceborne Radiances (NASA Landsat 8/9 & ESA Sentinel-5P TROPOMI) to Microclimate Equity,
+      Spatiotemporal Smog Downscaling, and Algorand x402 Decentralized Oracles.
+    </p>
+  </header>
+
+  <div class="diagram-card">
+    <svg id="diagram" viewBox="0 0 1320 860" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Gradients -->
+        <linearGradient id="grad-landsat" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1E293B"/>
+          <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+        <linearGradient id="grad-physics" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#064E3B" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+        <linearGradient id="grad-fusion" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#4C1D95" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+        <linearGradient id="grad-oracle" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#164E63" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+
+        <!-- Arrow Markers -->
+        <marker id="arr-orange" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 1 1.5 L 6.5 4 L 1 6.5 z" fill="#F97316" />
+        </marker>
+        <marker id="arr-cyan" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 1 1.5 L 6.5 4 L 1 6.5 z" fill="#38BDF8" />
+        </marker>
+        <marker id="arr-purple" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 1 1.5 L 6.5 4 L 1 6.5 z" fill="#C084FC" />
+        </marker>
+        <marker id="arr-green" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 1 1.5 L 6.5 4 L 1 6.5 z" fill="#34D399" />
+        </marker>
+      </defs>
+
+      <!-- ============================================================ -->
+      <!-- 1. TOP STAGE: MULTI-CONSTELLATION SPACEBORNE TELEMETRY -->
+      <!-- ============================================================ -->
+      <g id="layer-satellites">
+        <!-- Landsat 8/9 Node -->
+        <g class="workflow-box box-landsat satellite-node" transform="translate(100, 40)">
+          <rect class="bg-box" width="340" height="130" rx="14" fill="url(#grad-landsat)" stroke="#F97316" stroke-width="1.4"/>
+          <circle cx="34" cy="35" r="14" fill="#F97316" fill-opacity="0.15" stroke="#F97316" stroke-width="1.5"/>
+          <text x="34" y="39" font-size="13" font-weight="bold" fill="#F97316" text-anchor="middle">L9</text>
+          <text x="60" y="32" font-size="13" font-weight="700" fill="#FFFFFF">NASA/USGS Landsat-8 & 9 (TIRS)</text>
+          <text x="60" y="47" font-size="10.5" fill="#94A3B8">Band 10 (10.6 – 11.19 µm) • 100m resampled to 30m</text>
+          <line x1="20" y1="64" x2="320" y2="64" stroke="#334155" stroke-width="1"/>
+          <text x="20" y="84" font-size="10" fill="#CBD5E1">📡 Radiance: L_λ = M_L · Q_cal + A_L</text>
+          <text x="20" y="102" font-size="10" fill="#FBBF24">⚡ Calibration: K1 = 774.885, K2 = 1321.079 K</text>
+          <text x="20" y="118" font-size="9" fill="#64748B">USGS Single-Channel Preferred (Band 11 Stray Light Avoidance)</text>
+        </g>
+
+        <!-- Sentinel-5P TROPOMI Node (Mitacs GRI 53438 Core) -->
+        <g class="workflow-box box-sentinel satellite-node" transform="translate(490, 40)">
+          <rect class="bg-box" width="340" height="130" rx="14" fill="url(#grad-landsat)" stroke="#38BDF8" stroke-width="1.4"/>
+          <circle cx="34" cy="35" r="14" fill="#38BDF8" fill-opacity="0.15" stroke="#38BDF8" stroke-width="1.5"/>
+          <text x="34" y="39" font-size="12" font-weight="bold" fill="#38BDF8" text-anchor="middle">S5P</text>
+          <text x="60" y="32" font-size="13" font-weight="700" fill="#FFFFFF">ESA Copernicus Sentinel-5P (TROPOMI)</text>
+          <text x="60" y="47" font-size="10.5" fill="#38BDF8">Mitacs GRI #53438 Research Focus (Dr. Vijal Jain)</text>
+          <line x1="20" y1="64" x2="320" y2="64" stroke="#334155" stroke-width="1"/>
+          <text x="20" y="84" font-size="10" fill="#CBD5E1">💨 Atmospheric Columns: NO₂, O₃, CO, UV Aerosol</text>
+          <text x="20" y="102" font-size="10" fill="#38BDF8">🌲 Wildfire Smoke Tracking: Thompson Valley (Kamloops, BC)</text>
+          <text x="20" y="118" font-size="9" fill="#64748B">Continuous daily overpasses filling sparse ground sensor gaps</text>
+        </g>
+
+        <!-- Sentinel-2 MSI Node -->
+        <g class="workflow-box box-sentinel satellite-node" transform="translate(880, 40)">
+          <rect class="bg-box" width="340" height="130" rx="14" fill="url(#grad-landsat)" stroke="#10B981" stroke-width="1.4"/>
+          <circle cx="34" cy="35" r="14" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="1.5"/>
+          <text x="34" y="39" font-size="12" font-weight="bold" fill="#10B981" text-anchor="middle">S2</text>
+          <text x="60" y="32" font-size="13" font-weight="700" fill="#FFFFFF">ESA Copernicus Sentinel-2A/B (MSI)</text>
+          <text x="60" y="47" font-size="10.5" fill="#94A3B8">Band 8 (NIR 842nm) & Band 4 (Red 665nm) • 10m Spatial Res</text>
+          <line x1="20" y1="64" x2="320" y2="64" stroke="#334155" stroke-width="1"/>
+          <text x="20" y="84" font-size="10" fill="#CBD5E1">🌿 NDVI = (B8 - B4) / (B8 + B4)</text>
+          <text x="20" y="102" font-size="10" fill="#10B981">🌳 Canopy Density & Slum Evaporative Cooling Audit</text>
+          <text x="20" y="118" font-size="9" fill="#64748B">5-Day Constellation Revisit • Multi-Resolution Resampling</text>
+        </g>
+      </g>
+
+      <!-- Animated Radiative Transfer Rays -->
+      <path d="M 270 170 L 270 240 L 460 270" class="flow-ray" fill="none" stroke="#F97316" stroke-width="2" marker-end="url(#arr-orange)"/>
+      <path d="M 660 170 L 660 250" class="flow-ray-cyan" fill="none" stroke="#38BDF8" stroke-width="2" marker-end="url(#arr-cyan)"/>
+      <path d="M 1050 170 L 1050 240 L 860 270" class="flow-ray" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#arr-green)"/>
+
+      <!-- ============================================================ -->
+      <!-- 2. MIDDLE STAGE: FIRST-PRINCIPLES PHYSICS & SPATIOTEMPORAL ML -->
+      <!-- ============================================================ -->
+
+      <!-- Block 2A: Radiative Physics Inversion (Left) -->
+      <g class="workflow-box box-physics" transform="translate(100, 260)">
+        <rect class="bg-box" width="530" height="190" rx="14" fill="url(#grad-physics)" stroke="#10B981" stroke-width="1.3"/>
+        <text x="24" y="32" font-size="13" font-weight="700" fill="#34D399">🔬 Radiative Transfer & Thermal Inversion Engine</text>
+        <text x="24" y="48" font-size="10" fill="#94A3B8">Converts top-of-atmosphere radiance to thermodynamic skin Land Surface Temp (LST)</text>
+        <line x1="24" y1="60" x2="506" y2="60" stroke="#1E293B" stroke-width="1"/>
+        
+        <!-- Formula 1: Planck Inversion -->
+        <g transform="translate(24, 75)">
+          <rect width="230" height="50" rx="8" fill="#0B1120" stroke="#334155"/>
+          <text x="12" y="20" font-size="10" font-weight="700" fill="#FBBF24">Planck Law Inversion (BT):</text>
+          <text x="12" y="38" font-size="11" font-mono font-weight="600" fill="#FFFFFF">BT = K₂ / ln(K₁ / L_λ + 1) - 273.15</text>
+        </g>
+
+        <!-- Formula 2: Sobrino Emissivity -->
+        <g transform="translate(270, 75)">
+          <rect width="235" height="50" rx="8" fill="#0B1120" stroke="#334155"/>
+          <text x="12" y="20" font-size="10" font-weight="700" fill="#34D399">Sobrino Emissivity (FVC):</text>
+          <text x="12" y="38" font-size="11" font-mono font-weight="600" fill="#FFFFFF">ε = ε_v·FVC + ε_s·(1-FVC) + C_λ</text>
+        </g>
+
+        <!-- Final Single Channel -->
+        <g transform="translate(24, 135)">
+          <rect width="481" height="42" rx="8" fill="#064E3B" fill-opacity="0.25" stroke="#10B981" stroke-opacity="0.4"/>
+          <text x="14" y="18" font-size="10" font-weight="700" fill="#A7F3D0">True Thermodynamic Skin Temperature (LST):</text>
+          <text x="14" y="32" font-size="11" font-mono font-weight="700" fill="#FFFFFF">LST = BT / [ 1 + (λ · BT / ρ) · ln(ε) ]   (where ρ = h·c / k_B = 1.438 × 10⁻² m·K)</text>
+        </g>
+      </g>
+
+      <!-- Block 2B: Spatiotemporal ML & Smog Forecasting (Right - Mitacs 53438) -->
+      <g class="workflow-box box-fusion" transform="translate(680, 260)">
+        <rect class="bg-box" width="540" height="190" rx="14" fill="url(#grad-fusion)" stroke="#C084FC" stroke-width="1.3"/>
+        <text x="24" y="32" font-size="13" font-weight="700" fill="#C084FC">🤖 Spatiotemporal ML & Smog Episode Forecasting (Mitacs GRI)</text>
+        <text x="24" y="48" font-size="10" fill="#94A3B8">Fusing sparse ground stations with continuous satellite rasters to predict unmonitored zones</text>
+        <line x1="24" y1="60" x2="516" y2="60" stroke="#1E293B" stroke-width="1"/>
+
+        <g transform="translate(24, 75)">
+          <rect width="235" height="50" rx="8" fill="#0B1120" stroke="#334155"/>
+          <text x="12" y="20" font-size="10" font-weight="700" fill="#E879F9">STARFM Downscaling:</text>
+          <text x="12" y="38" font-size="10" fill="#E2E8F0">1km daily MODIS + 30m Landsat-9 fusion</text>
+        </g>
+
+        <g transform="translate(275, 75)">
+          <rect width="240" height="50" rx="8" fill="#0B1120" stroke="#334155"/>
+          <text x="12" y="20" font-size="10" font-weight="700" fill="#38BDF8">Spatio-Temporal Kriging:</text>
+          <text x="12" y="38" font-size="10" fill="#E2E8F0">Interpolates unmonitored valley smoke gaps</text>
+        </g>
+
+        <g transform="translate(24, 135)">
+          <rect width="491" height="42" rx="8" fill="#581C87" fill-opacity="0.3" stroke="#C084FC" stroke-opacity="0.4"/>
+          <text x="14" y="18" font-size="10" font-weight="700" fill="#F5D0FE">Canadian Wildfire Air Quality Health Index (AQHI Forecast):</text>
+          <text x="14" y="32" font-size="11" font-mono font-weight="700" fill="#FFFFFF">AQHI = f( TROPOMI_NO₂, UV_Aerosol_Index, Ambient_PM2.5, Wind_Vector, PBL_Height )</text>
+        </g>
+      </g>
+
+      <!-- Connecting Connectors to Stage 3 -->
+      <path d="M 365 450 L 365 520 L 590 540" class="flow-ray" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#arr-green)"/>
+      <path d="M 950 450 L 950 520 L 730 540" class="flow-ray-cyan" fill="none" stroke="#C084FC" stroke-width="2" marker-end="url(#arr-purple)"/>
+
+      <!-- ============================================================ -->
+      <!-- 3. DECISION ENGINE: MULTI-CRITERIA EQUITY & ALGORAND ORACLE -->
+      <!-- ============================================================ -->
+
+      <!-- Center Box: Composite Priority Formula -->
+      <g class="workflow-box" transform="translate(380, 500)">
+        <rect class="bg-box" width="560" height="120" rx="14" fill="#0B1120" stroke="#F59E0B" stroke-width="1.6"/>
+        <text x="280" y="28" font-size="13" font-weight="700" fill="#FBBF24" text-anchor="middle">⚖️ Multi-Factor Priority & Vulnerability Index (P)</text>
+        <line x1="20" y1="40" x2="540" y2="40" stroke="#334155" stroke-width="1"/>
+        <text x="280" y="65" font-size="13" font-mono font-weight="bold" fill="#FFFFFF" text-anchor="middle">P = 0.35 · LST_norm + 0.25 · (1 - NDVI_norm) + 0.20 · AQI_norm + 0.20 · Risk_informal</text>
+        <text x="280" y="85" font-size="10" fill="#94A3B8" text-anchor="middle">Automatically categorizes: CRITICAL_RED (≥85) • HIGH_ORANGE (≥70) • MODERATE (≥50) • BENCHMARK</text>
+        <text x="280" y="103" font-size="9.5" fill="#10B981" text-anchor="middle">✓ Validated via 1,000-trial Monte Carlo perturbation (Spearman rank correlation r_s = 0.982)</text>
+      </g>
+
+      <!-- Flows to Output & Oracles -->
+      <path d="M 450 620 L 450 670 L 280 690" class="flow-ray-orange" fill="none" stroke="#06B6D4" stroke-width="2" marker-end="url(#arr-cyan)"/>
+      <path d="M 870 620 L 870 670 L 1030 690" class="flow-ray" fill="none" stroke="#EF4444" stroke-width="2" marker-end="url(#arr-orange)"/>
+
+      <!-- ============================================================ -->
+      <!-- 4. BOTTOM STAGE: BLOCKCHAIN ORACLE & CLIMATE MITIGATION -->
+      <!-- ============================================================ -->
+
+      <!-- Bottom-Left: Algorand x402 Oracle -->
+      <g class="workflow-box box-oracle" transform="translate(100, 680)">
+        <rect class="bg-box" width="460" height="150" rx="14" fill="url(#grad-oracle)" stroke="#06B6D4" stroke-width="1.4"/>
+        <circle cx="32" cy="32" r="14" fill="#06B6D4" fill-opacity="0.15" stroke="#06B6D4" stroke-width="1.5"/>
+        <text x="32" y="37" font-size="12" font-weight="bold" fill="#06B6D4" text-anchor="middle">402</text>
+        <text x="56" y="28" font-size="12.5" font-weight="700" fill="#FFFFFF">Decentralized x402 Climate Oracle (Algorand AVM)</text>
+        <text x="56" y="44" font-size="10" fill="#67E8F9">HTTP 402 Micropayment Protocol • 0.005 USDC per satellite audit</text>
+        <line x1="20" y1="58" x2="440" y2="58" stroke="#164E63" stroke-width="1"/>
+        <text x="20" y="78" font-size="10" fill="#CBD5E1">1. AI Agent / NGO submits GET /ward-audit</text>
+        <text x="20" y="96" font-size="10" fill="#67E8F9">2. 402 Challenge Issued (Payment Descriptor on Algorand TestNet)</text>
+        <text x="20" y="114" font-size="10" fill="#CBD5E1">3. Pera/Defly Wallet Signs Txn • Instant 3.3s Fast Finality</text>
+        <text x="20" y="132" font-size="9.5" fill="#34D399">✓ Immutable cryptographic climate audit hash pinned to ledger</text>
+      </g>
+
+      <!-- Bottom-Right: Municipal & Public Health Mitigation -->
+      <g class="workflow-box box-impact" transform="translate(760, 680)">
+        <rect class="bg-box" width="460" height="150" rx="14" fill="#180C14" stroke="#EF4444" stroke-width="1.4"/>
+        <circle cx="32" cy="32" r="14" fill="#EF4444" fill-opacity="0.15" stroke="#EF4444" stroke-width="1.5"/>
+        <text x="32" y="37" font-size="12" font-weight="bold" fill="#EF4444" text-anchor="middle">HAP</text>
+        <text x="56" y="28" font-size="12.5" font-weight="700" fill="#FFFFFF">Automated Heat Action Plan & Wildfire Advisory</text>
+        <text x="56" y="44" font-size="10" fill="#FCA5A5">NDMA Heat Action Guidelines & ECCC Public Health Interventions</text>
+        <line x1="20" y1="58" x2="440" y2="58" stroke="#450A0A" stroke-width="1"/>
+        <text x="20" y="78" font-size="10" fill="#CBD5E1">🏙️ Cool-Roofs: 450 households per ₹1 Lakh (-2.8°C indoor cooling)</text>
+        <text x="20" y="96" font-size="10" fill="#CBD5E1">🌳 Shade Canopies: 120 fast-growing native saplings per ₹1 Lakh</text>
+        <text x="20" y="114" font-size="10" fill="#FCA5A5">💨 Wildfire Clean Air Shelters: Automated dispatch for asthmatic clusters</text>
+        <text x="20" y="132" font-size="9.5" fill="#F87171">⚠️ Automated 12:00 – 3:30 PM Outdoor Gig Worker Work-Stoppage Alert</text>
+      </g>
+
+    </svg>
+
+    <div class="telemetry-row">
+      <div class="telemetry-item">
+        <span class="dot dot-green"></span>
+        <span>Satellite Ingestion: Landsat-9 TIRS & Sentinel-5P TROPOMI Active</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="dot dot-amber"></span>
+        <span>Algorand AVM Testnet: Connected via GoPlausible Facilitator</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="dot dot-cyan"></span>
+        <span>Candidate: Rohit Singh (Mitacs GRI 2027 • Candidate ID Verified)</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

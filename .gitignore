@@ -1,4 +1,4 @@
-﻿# Dependencies
+# Dependencies
 node_modules/
 /.pnp
 .pnp.js
@@ -26,3 +26,19 @@ lerna-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Generated Pipeline Rasters
+ml_engine/data/outputs/*.tif
+!ml_engine/data/outputs/.gitkeep

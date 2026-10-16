@@ -1,16 +1,22 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import LayerControls from './components/LayerControls';
 import MapView from './components/MapView';
 import WardDrawer from './components/WardDrawer';
 import X402PaymentModal from './components/X402PaymentModal';
+import WorkflowModal from './components/WorkflowModal';
 import { fetchWardsSummary, requestWardAudit, requestHapSimulation } from './services/api';
+import canadianSmogData from './data/canadian_smog_corridor.json';
 import { AlertTriangle, Flame, ShieldCheck, Sparkles, Building2, Users } from 'lucide-react';
 
 export default function App() {
   const [geoData, setGeoData] = useState(null);
+  const [delhiData, setDelhiData] = useState(null);
+  const [activeRegion, setActiveRegion] = useState('delhi'); // 'delhi' | 'canada'
   const [activeLayer, setActiveLayer] = useState('priority');
   const [selectedWard, setSelectedWard] = useState(null);
+  const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
+  const [radarEnabled, setRadarEnabled] = useState(true);
   
   // Wallet State
   const [isConnected, setIsConnected] = useState(false);
@@ -30,6 +36,7 @@ export default function App() {
   useEffect(() => {
     async function loadData() {
       const data = await fetchWardsSummary();
+      setDelhiData(data);
       setGeoData(data);
       // Default to Seelampur (Highest Contrast Ward)
       if (data && data.features && data.features.length > 0) {
@@ -38,6 +45,26 @@ export default function App() {
     }
     loadData();
   }, []);
+
+  const handleChangeRegion = (region) => {
+    if (region === activeRegion) return;
+    setActiveRegion(region);
+    setAuditData(null);
+    setSimulationData(null);
+
+    if (region === 'canada') {
+      setGeoData(canadianSmogData);
+      setSelectedWard(canadianSmogData.features[0].properties);
+      setActiveLayer('priority');
+    } else {
+      const target = delhiData || canadianSmogData;
+      setGeoData(target);
+      if (target.features && target.features.length > 0) {
+        setSelectedWard(target.features[0].properties);
+      }
+      setActiveLayer('priority');
+    }
+  };
 
   const handleConnectWallet = () => {
     // Simulated Pera Wallet Connection for Instant Live Demo
@@ -107,6 +134,9 @@ export default function App() {
         isConnected={isConnected}
         onConnect={handleConnectWallet}
         onDisconnect={handleDisconnectWallet}
+        activeRegion={activeRegion}
+        onChangeRegion={handleChangeRegion}
+        onOpenWorkflow={() => setWorkflowModalOpen(true)}
       />
 
       {/* 2. Main Dashboard */}
@@ -116,32 +146,61 @@ export default function App() {
         <div className="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-rose-500 animate-ping"></span>
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">Delhi NCR Microclimate Equity Oracle</h2>
+              <span className={`h-2.5 w-2.5 rounded-full ${activeRegion === 'canada' ? 'bg-rose-500' : 'bg-amber-400'} animate-ping`}></span>
+              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+                {activeRegion === 'canada' 
+                  ? '🇨🇦 Mitacs GRI #53438: Canadian Wildfire Smog & Satellite Air Quality Oracle' 
+                  : 'Delhi NCR Microclimate Equity Oracle'}
+              </h2>
             </div>
             <p className="text-xs text-slate-400">
-              Uncovering hidden <b>8°C – 10°C thermal burdens</b> & extreme AQI disparities across informal settlements.
+              {activeRegion === 'canada'
+                ? 'Fusing Sentinel-5P TROPOMI & Landsat-9 TIRS with Spatiotemporal Kriging across Kamloops & BC Valleys (Dr. Vijal Jain, TRU).'
+                : 'Uncovering hidden 8°C – 10°C thermal burdens & extreme AQI disparities across informal settlements.'}
             </p>
           </div>
 
           <div className="flex items-center gap-3 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
-              <p className="text-[10px] text-slate-400">Max LST Recorded</p>
-              <p className="font-bold text-rose-400 text-sm">45.2°C</p>
-            </div>
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
-              <p className="text-[10px] text-slate-400">Inequality Gap</p>
-              <p className="font-bold text-amber-400 text-sm">+10.6°C</p>
-            </div>
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
-              <p className="text-[10px] text-slate-400">Oracle Protocol</p>
-              <p className="font-bold text-emerald-400 text-sm">x402 (AVM)</p>
-            </div>
+            {activeRegion === 'canada' ? (
+              <>
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                  <p className="text-[10px] text-slate-400">Peak Wildfire AQHI</p>
+                  <p className="font-bold text-rose-400 text-sm">9.8 / 10</p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                  <p className="text-[10px] text-slate-400">Unmonitored Gap</p>
+                  <p className="font-bold text-amber-400 text-sm">42.0 km</p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                  <p className="text-[10px] text-slate-400">Kriging ML Model</p>
+                  <p className="font-bold text-cyan-400 text-sm">R² = 0.88</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                  <p className="text-[10px] text-slate-400">Max LST Recorded</p>
+                  <p className="font-bold text-rose-400 text-sm">45.2°C</p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                  <p className="text-[10px] text-slate-400">Inequality Gap</p>
+                  <p className="font-bold text-amber-400 text-sm">+10.6°C</p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-center">
+                  <p className="text-[10px] text-slate-400">Oracle Protocol</p>
+                  <p className="font-bold text-emerald-400 text-sm">x402 (AVM)</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* Layer Controls */}
-        <LayerControls activeLayer={activeLayer} setActiveLayer={setActiveLayer} />
+        <LayerControls 
+          activeLayer={activeLayer} 
+          setActiveLayer={setActiveLayer}
+          activeRegion={activeRegion}
+        />
 
         {/* GIS Map & Drawer Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[650px]">
@@ -152,6 +211,9 @@ export default function App() {
               geoData={geoData} 
               activeLayer={activeLayer}
               selectedWard={selectedWard}
+              activeRegion={activeRegion}
+              radarEnabled={radarEnabled}
+              onToggleRadar={() => setRadarEnabled(!radarEnabled)}
               onSelectWard={(wardProps) => {
                 setSelectedWard(wardProps);
                 setAuditData(null);
@@ -164,6 +226,7 @@ export default function App() {
           <div className="lg:col-span-4 h-full">
             <WardDrawer 
               selectedWard={selectedWard}
+              activeRegion={activeRegion}
               onClose={() => setSelectedWard(null)}
               onRequestAudit={handleRequestAudit}
               isAuditing={isProcessingPayment && pendingAction?.type === 'AUDIT'}
@@ -185,6 +248,12 @@ export default function App() {
         invoice={currentInvoice}
         onApprove={handleApprovePayment}
         isProcessing={isProcessingPayment}
+      />
+
+      {/* 4. Multi-Constellation Architecture & Mitacs Workflow Modal */}
+      <WorkflowModal 
+        isOpen={workflowModalOpen}
+        onClose={() => setWorkflowModalOpen(false)}
       />
 
     </div>

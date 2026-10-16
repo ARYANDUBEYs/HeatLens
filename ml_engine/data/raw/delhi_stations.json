@@ -1,0 +1,87 @@
+{
+  "corridor": "delhi",
+  "provider": "CPCB_NAQI",
+  "total_stations": 8,
+  "stations": [
+    {
+      "station_id": "CPCB_DEL_01",
+      "name": "Anand Vihar Monitoring Station",
+      "latitude": 28.6469,
+      "longitude": 77.316,
+      "elevation_m": 215.0,
+      "current_pm25": 210.0,
+      "aqhi": 10.0,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_02",
+      "name": "R K Puram NAQI Lab",
+      "latitude": 28.563,
+      "longitude": 77.186,
+      "elevation_m": 228.0,
+      "current_pm25": 165.0,
+      "aqhi": 8.5,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_03",
+      "name": "Punjabi Bagh Urban Sensor",
+      "latitude": 28.674,
+      "longitude": 77.131,
+      "elevation_m": 218.0,
+      "current_pm25": 190.0,
+      "aqhi": 9.2,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_04",
+      "name": "Shadipur Central Feeder",
+      "latitude": 28.651,
+      "longitude": 77.158,
+      "elevation_m": 216.0,
+      "current_pm25": 178.0,
+      "aqhi": 8.9,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_05",
+      "name": "Bawana Industrial Perimeter",
+      "latitude": 28.795,
+      "longitude": 77.042,
+      "elevation_m": 222.0,
+      "current_pm25": 260.0,
+      "aqhi": 10.5,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_06",
+      "name": "Okhla Phase-II Monitoring",
+      "latitude": 28.531,
+      "longitude": 77.271,
+      "elevation_m": 219.0,
+      "current_pm25": 182.0,
+      "aqhi": 9.0,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_07",
+      "name": "Jahangirpuri North Gateway",
+      "latitude": 28.732,
+      "longitude": 77.17,
+      "elevation_m": 214.0,
+      "current_pm25": 235.0,
+      "aqhi": 10.0,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "CPCB_DEL_08",
+      "name": "Dwarka Sector 8 Baseline",
+      "latitude": 28.571,
+      "longitude": 77.071,
+      "elevation_m": 225.0,
+      "current_pm25": 140.0,
+      "aqhi": 7.8,
+      "status": "ACTIVE"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -33,4 +33,65 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Sci-Fi Radar Scan Sweep Animation for Leaflet Satellite Map */
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); opacity: 0.6; }
+  50% { opacity: 0.85; }
+  100% { transform: rotate(360deg); opacity: 0.6; }
+}
+
+.radar-sweep-beam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  margin-top: -60%;
+  margin-left: -60%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(6, 182, 212, 0.12) 30deg, rgba(56, 189, 248, 0.35) 60deg, transparent 61deg);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 500;
+  animation: radarSweep 10s linear infinite;
+}
+
+/* Glowing Border Pulse for Critical Hazards */
+@keyframes borderGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(225, 29, 72, 0.25), inset 0 0 10px rgba(225, 29, 72, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(225, 29, 72, 0.5), inset 0 0 15px rgba(225, 29, 72, 0.2);
+  }
+}
+
+.hazard-glow-pulse {
+  animation: borderGlowPulse 2.8s ease-in-out infinite;
+}
+
+/* Satellite Orbit Beacon */
+@keyframes satelliteBlink {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px #38BDF8); }
+}
+
+.satellite-beacon {
+  animation: satelliteBlink 2.2s ease-in-out infinite;
+}
+
+/* Smooth Gradient Shimmer */
+@keyframes textShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #F8FAFC, #38BDF8, #F59E0B, #F8FAFC);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 6s linear infinite;
 }

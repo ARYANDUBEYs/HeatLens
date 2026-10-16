@@ -1,0 +1,57 @@
+{
+  "corridor": "kamloops",
+  "provider": "ECCC_NAPS",
+  "total_stations": 5,
+  "stations": [
+    {
+      "station_id": "ECCC_KM_01",
+      "name": "Kamloops Downtown Federal Station",
+      "latitude": 50.6745,
+      "longitude": -120.3273,
+      "elevation_m": 348.0,
+      "current_pm25": 42.5,
+      "aqhi": 5.2,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "ECCC_KM_02",
+      "name": "Kamloops North Shore Station",
+      "latitude": 50.6912,
+      "longitude": -120.3541,
+      "elevation_m": 352.0,
+      "current_pm25": 58.2,
+      "aqhi": 6.8,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "ECCC_KM_03",
+      "name": "Thompson Rivers University Air Lab",
+      "latitude": 50.6701,
+      "longitude": -120.365,
+      "elevation_m": 435.0,
+      "current_pm25": 38.1,
+      "aqhi": 4.9,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "ECCC_KM_04",
+      "name": "Valleyview Inversion Site",
+      "latitude": 50.6651,
+      "longitude": -120.2612,
+      "elevation_m": 342.0,
+      "current_pm25": 84.7,
+      "aqhi": 8.9,
+      "status": "ACTIVE"
+    },
+    {
+      "station_id": "ECCC_KM_05",
+      "name": "Rayleigh North Valley Sentinel",
+      "latitude": 50.7812,
+      "longitude": -120.2981,
+      "elevation_m": 360.0,
+      "current_pm25": 92.4,
+      "aqhi": 9.4,
+      "status": "ACTIVE"
+    }
+  ]
+}
