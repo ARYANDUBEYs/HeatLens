@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Radio, Satellite, Layers, ShieldCheck, Home, Cpu } from 'lucide-react';
+import { Radio, Satellite, Layers, ShieldCheck, Home, Cpu, Search, MapPin, Crosshair, X } from 'lucide-react';
 import RadarSweep from './RadarSweep';
 
 // Regulatory Ground Truth Stations Database (NAPS / ECCC in Kamloops; CPCB in Delhi)
@@ -156,6 +156,30 @@ const REGULATORY_STATIONS = {
   ]
 };
 
+// Spatial Index of Key Landmarks & Neighborhoods for GIS Quick-Navigation
+const CORRIDOR_LANDMARKS = {
+  kamloops: [
+    { name: 'TRU Air Lab (Thompson Rivers University)', type: 'Mitacs GRI #53438 Research HQ', lat: 50.6701, lon: -120.3650 },
+    { name: 'Downtown Kamloops Federal Station', type: 'ECCC NAPS Ground Truth Monitor', lat: 50.6745, lon: -120.3273 },
+    { name: 'Kamloops North Shore Station', type: 'ECCC Urban Inversion Sentinel', lat: 50.6912, lon: -120.3541 },
+    { name: 'Valleyview Inversion Basin', type: 'Critical Valley Trapping Hotspot', lat: 50.6651, lon: -120.2612 },
+    { name: 'Rayleigh North Valley Sentinel', type: 'Wildfire Smoke Entry Gateway', lat: 50.7812, lon: -120.2981 },
+    { name: 'Sahali Ridge Plateau', type: 'Elevated Boundary Layer Site (510m)', lat: 50.6580, lon: -120.3520 },
+    { name: 'Mount Dufferin High Plains', type: 'Topographical Crest (580m)', lat: 50.6520, lon: -120.3950 },
+    { name: 'Dallas East Thompson Corridor', type: 'Downwind Wildfire Accumulation', lat: 50.6500, lon: -120.1800 }
+  ],
+  delhi: [
+    { name: 'Anand Vihar Monitoring Hub', type: 'CPCB NAQI Critical Hazard Zone', lat: 28.6469, lon: 77.3160 },
+    { name: 'Bawana Industrial Perimeter', type: 'High Industrial Thermal Burden', lat: 28.7950, lon: 77.0420 },
+    { name: 'Jahangirpuri Informal Cluster', type: 'Sensor Void Vulnerability (SVVI 0.89)', lat: 28.7320, lon: 77.1700 },
+    { name: 'R K Puram Environmental Station', type: 'CPCB Baseline Ground Truth', lat: 28.5630, lon: 77.1860 },
+    { name: 'Punjabi Bagh Urban Node', type: 'CPCB Telemetry Monitor', lat: 28.6740, lon: 77.1310 },
+    { name: 'Okhla Phase-II Industrial', type: 'Thermal Island & Particulate Hotspot', lat: 28.5310, lon: 77.2710 },
+    { name: 'Shadipur Central Feeder', type: 'High Density Urban Corridor', lat: 28.6510, lon: 77.1580 },
+    { name: 'Connaught Place Commercial Core', type: 'Central Urban Benchmark', lat: 28.6315, lon: 77.2167 }
+  ]
+};
+
 // 1. Custom SVG DivIcon for Regulatory Ground Stations (ECCC / CPCB)
 const createStationIcon = (station) => {
   return L.divIcon({
@@ -221,11 +245,16 @@ const createSensorIcon = () => {
   });
 };
 
-// Map Controller for smooth corridor transitions
-function MapController({ activeCorridor }) {
+// Map Controller for smooth corridor transitions and targeted landmark navigation
+function MapController({ activeCorridor, flyTarget }) {
   const map = useMap();
 
   useEffect(() => {
+    if (flyTarget && flyTarget.lat && flyTarget.lon) {
+      map.flyTo([flyTarget.lat, flyTarget.lon], flyTarget.zoom || 14, { duration: 1.5 });
+      return;
+    }
+
     if (activeCorridor === 'kamloops') {
       // Kamloops Corridor: Center [50.6745, -120.3273], zoom 11
       map.flyTo([50.6745, -120.3273], 11, { duration: 1.6 });
@@ -233,7 +262,7 @@ function MapController({ activeCorridor }) {
       // Delhi NCR Corridor: Center [28.6139, 77.2090], zoom 11
       map.flyTo([28.6139, 77.2090], 11, { duration: 1.6 });
     }
-  }, [activeCorridor, map]);
+  }, [activeCorridor, flyTarget, map]);
 
   return null;
 }
@@ -253,6 +282,112 @@ export default function MapViewer({
   const isRadarOn = overlays?.radar !== undefined ? overlays.radar : radarEnabled;
   const isStationsOn = overlays?.stations !== undefined ? overlays.stations : true;
   const isSheltersOn = overlays?.shelters !== undefined ? overlays.shelters : true;
+
+  // GIS Search & Landmark Navigator States
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
+  const [searchStatus, setSearchStatus] = useState(null);
+  const [flyTarget, setFlyTarget] = useState(null);
+
+  // Reset search when corridor changes
+  useEffect(() => {
+    setSearchQuery('');
+    setIsSearchOpen(false);
+    setSearchStatus(null);
+    setFlyTarget(null);
+  }, [activeCorridor]);
+
+  // Current corridor landmarks
+  const corridorLandmarks = useMemo(() => {
+    return CORRIDOR_LANDMARKS[activeCorridor] || CORRIDOR_LANDMARKS.kamloops;
+  }, [activeCorridor]);
+
+  // Filtered landmarks based on user query
+  const filteredLandmarks = useMemo(() => {
+    if (!searchQuery.trim()) return corridorLandmarks;
+    const q = searchQuery.toLowerCase();
+    return corridorLandmarks.filter(
+      l => l.name.toLowerCase().includes(q) || l.type.toLowerCase().includes(q)
+    );
+  }, [corridorLandmarks, searchQuery]);
+
+  // Nearest quad feature finder to sync telemetry panel
+  const findClosestFeature = (lat, lon) => {
+    if (!geoData || !geoData.features || geoData.features.length === 0) return null;
+    let closest = null;
+    let minDistance = Infinity;
+    for (const f of geoData.features) {
+      const p = f.properties || {};
+      if (p.center_lat && p.center_lon) {
+        const d = Math.hypot(p.center_lat - lat, p.center_lon - lon);
+        if (d < minDistance) {
+          minDistance = d;
+          closest = p;
+        }
+      }
+    }
+    return closest;
+  };
+
+  const handleSelectLandmark = (item) => {
+    setFlyTarget({ lat: item.lat, lon: item.lon, zoom: 14 });
+    setSearchQuery(item.name);
+    setIsSearchOpen(false);
+
+    const closest = findClosestFeature(item.lat, item.lon);
+    if (closest && onSelectFeature) {
+      onSelectFeature(closest);
+    }
+    setSearchStatus(`Target Locked: ${item.name}`);
+    setTimeout(() => setSearchStatus(null), 4000);
+  };
+
+  const handleGlobalSearch = async (e) => {
+    e?.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    // Check if query matches local landmark
+    const match = corridorLandmarks.find(l =>
+      l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      l.type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    if (match) {
+      handleSelectLandmark(match);
+      return;
+    }
+
+    // Otherwise geocode via OpenStreetMap Nominatim
+    setIsGeocoding(true);
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1`);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        setFlyTarget({ lat, lon, zoom: 12 });
+        setIsSearchOpen(false);
+
+        const closest = findClosestFeature(lat, lon);
+        if (closest && onSelectFeature) {
+          onSelectFeature(closest);
+          setSearchStatus(`Acquired: ${data[0].display_name.split(',')[0]} (In Corridor)`);
+        } else {
+          setSearchStatus(`Geocoded: ${data[0].display_name.split(',')[0]} (Outside active corridor)`);
+        }
+        setTimeout(() => setSearchStatus(null), 5000);
+      } else {
+        setSearchStatus("Location not found in geospatial index");
+        setTimeout(() => setSearchStatus(null), 3000);
+      }
+    } catch (err) {
+      console.warn("Geocoding error:", err);
+      setSearchStatus("Geocoding service unavailable");
+      setTimeout(() => setSearchStatus(null), 3000);
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
 
   // Active Corridor Stations
   const corridorStations = useMemo(() => {
@@ -375,6 +510,86 @@ export default function MapViewer({
       {/* High-Tech Animated Radar Sweep & Satellite Swath Overlay */}
       <RadarSweep active={isRadarOn} corridor={activeCorridor} />
 
+      {/* Top Left: Smart GIS Landmark & Geocoding Search HUD */}
+      <div className="absolute top-4 left-4 z-[1000] w-72 sm:w-80">
+        <form onSubmit={handleGlobalSearch} className="relative">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-900/90 backdrop-blur-xl border border-slate-700/80 shadow-2xl focus-within:border-cyan-500/80 transition-all">
+            <Search className="h-4 w-4 text-cyan-400 shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsSearchOpen(true);
+              }}
+              onFocus={() => setIsSearchOpen(true)}
+              placeholder={activeCorridor === 'kamloops' ? "Search Kamloops (e.g. TRU, Valleyview)..." : "Search Delhi (e.g. Anand Vihar, Bawana)..."}
+              className="w-full bg-transparent text-xs text-slate-100 placeholder:text-slate-400 focus:outline-none font-mono"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setIsSearchOpen(false);
+                }}
+                className="text-slate-400 hover:text-white"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+            {isGeocoding && (
+              <div className="h-3.5 w-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin shrink-0"></div>
+            )}
+          </div>
+        </form>
+
+        {/* Search Status Toast */}
+        {searchStatus && (
+          <div className="mt-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/90 border border-cyan-500/40 text-[11px] font-mono text-cyan-300 shadow-xl backdrop-blur-md animate-in fade-in flex items-center gap-1.5">
+            <Crosshair className="h-3.5 w-3.5 text-cyan-400 animate-spin" />
+            <span className="truncate">{searchStatus}</span>
+          </div>
+        )}
+
+        {/* Dropdown Suggestions */}
+        {isSearchOpen && (
+          <div className="mt-2 rounded-2xl bg-[#090e1a]/95 backdrop-blur-xl border border-slate-700/80 shadow-2xl overflow-hidden max-h-64 overflow-y-auto animate-in fade-in slide-in-from-top-1">
+            <div className="p-2 border-b border-slate-800 text-[10px] font-mono text-slate-400 flex items-center justify-between">
+              <span>CORRIDOR LANDMARKS & STATIONS</span>
+              <span className="text-cyan-400">{filteredLandmarks.length} nodes</span>
+            </div>
+            <div className="p-1 space-y-0.5">
+              {filteredLandmarks.map((item, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleSelectLandmark(item)}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-cyan-500/10 flex items-start justify-between gap-2 transition group"
+                >
+                  <div>
+                    <p className="text-xs font-semibold text-slate-200 group-hover:text-cyan-300 transition flex items-center gap-1.5">
+                      <MapPin className="h-3 w-3 text-cyan-400 shrink-0" />
+                      <span>{item.name}</span>
+                    </p>
+                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">{item.type}</p>
+                  </div>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800/80 text-slate-400 border border-slate-700 shrink-0 mt-0.5">
+                    {item.lat.toFixed(2)}, {item.lon.toFixed(2)}
+                  </span>
+                </button>
+              ))}
+              {filteredLandmarks.length === 0 && (
+                <div className="p-3 text-center text-xs text-slate-400">
+                  <p>No local landmark match.</p>
+                  <p className="text-[10px] text-cyan-400 font-mono mt-1">Press [Enter] to geocode globally via OSM</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Top Map HUD Controls Badges */}
       <div className="absolute top-4 right-4 z-[1000] flex items-center gap-2">
         <button
@@ -402,7 +617,7 @@ export default function MapViewer({
         scrollWheelZoom={true}
         className="h-full w-full"
       >
-        <MapController activeCorridor={activeCorridor} />
+        <MapController activeCorridor={activeCorridor} flyTarget={flyTarget} />
 
         {/* High-Performance CartoDB Dark Matter Basemap */}
         <TileLayer
