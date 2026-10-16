@@ -191,7 +191,7 @@ $$\text{subject to:} \quad \sum_{j=1}^M \big(C_{\text{shelter}} \cdot x_j + C_{\
 #### 1. Clone & Set Up Backend
 ```powershell
 # Navigate to backend directory
-cd D:\plan\buildwithbharat\ml_engine
+cd D:\plan\buildwithbharat\backend
 
 # Create & activate virtual environment (Python 3.10+)
 python -m venv venv
@@ -212,7 +212,7 @@ uvicorn app.main:app --reload --port 8000
 #### 2. Set Up & Launch Frontend
 ```powershell
 # Navigate to frontend client workspace
-cd D:\plan\buildwithbharat\heatlens-frontend
+cd D:\plan\buildwithbharat\frontend
 
 # Install dependencies
 npm install
@@ -231,7 +231,7 @@ npm run dev
 
 ```dockerfile
 # Build backend container using OSGeo GDAL base
-cd D:\plan\buildwithbharat\ml_engine
+cd D:\plan\buildwithbharat\backend
 docker build -t heatlens-backend:2.0 .
 docker run -d -p 8000:8000 --name heatlens-api heatlens-backend:2.0
 ```
@@ -263,7 +263,7 @@ docker run -d -p 8000:8000 --name heatlens-api heatlens-backend:2.0
     "resolution_meters": 350.0,
     "dimensions": { "height": 39, "width": 41 },
     "total_pixels": 1599,
-    "geotiff_file": "D:\\plan\\buildwithbharat\\ml_engine\\data\\outputs\\kamloops_downscaled_20261016_221015.tif",
+    "geotiff_file": "D:\\plan\\buildwithbharat\\backend\\data\\outputs\\kamloops_downscaled_20261016_221015.tif",
     "sha256_digest": "5a833cad3b9851906f3be2c168be5243b47b11349c7056b8075a834db50c9d20"
   },
   "downscaled_metrics": {

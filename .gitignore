@@ -40,5 +40,5 @@ venv/
 htmlcov/
 
 # Generated Pipeline Rasters
-ml_engine/data/outputs/*.tif
-!ml_engine/data/outputs/.gitkeep
+backend/data/outputs/*.tif
+!backend/data/outputs/.gitkeep
