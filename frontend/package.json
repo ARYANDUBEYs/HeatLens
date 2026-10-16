@@ -1,7 +1,7 @@
 {
-  "name": "heatlens-x402-frontend",
-  "version": "1.0.0",
+  "name": "heatlens-frontend",
   "private": true,
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,12 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@perawallet/connect": "^1.4.1",
-    "@txnlab/use-wallet": "^4.0.0",
-    "@txnlab/use-wallet-react": "^4.0.0",
-    "@x402-avm/fetch": "^2.6.1",
-    "@x402-avm/core": "^2.6.1",
-    "algosdk": "^3.0.0",
+    "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.468.0",
