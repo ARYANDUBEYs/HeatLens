@@ -1,5 +1,5 @@
 """
-HeatLens - Microsoft Imagine Cup 2026 (Earth Track)
+HeatLens - Urban Climate Intelligence Platform
 Azure Serverless Telemetry Processing Worker
 File: backend/functions/process_satellite_feed.py
 

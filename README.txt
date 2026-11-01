@@ -1,4 +1,4 @@
-# HeatLens × Microsoft Imagine Cup 2026
+# HeatLens — Urban Climate Intelligence Platform
 # MASTER README — START HERE
 =============================================================
 
@@ -93,7 +93,7 @@ That's it. 10 minutes. Then come back and start Week 1 Day 2.
 ## KEY LINKS
 =============================================================
 
-Imagine Cup Registration : https://imagine.microsoft.com
+Microsoft Learn          : https://learn.microsoft.com
 Azure for Students       : https://azure.microsoft.com/en-us/free/students
 Azure Maps Docs          : https://learn.microsoft.com/en-us/azure/azure-maps/
 Azure OpenAI Docs        : https://learn.microsoft.com/en-us/azure/ai-services/openai/

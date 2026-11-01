@@ -245,7 +245,7 @@ export function Sidebar({ selectedWardId, onSelectWard }: SidebarProps) {
           <span>Region: Central India (Mumbai)</span>
         </span>
         <span className="font-mono font-semibold text-azure-primary">
-          Imagine Cup '26
+          Climate AI '26
         </span>
       </div>
 

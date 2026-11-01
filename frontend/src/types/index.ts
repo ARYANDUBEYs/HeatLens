@@ -1,5 +1,5 @@
 /**
- * HeatLens × Microsoft Imagine Cup 2026
+ * HeatLens — Urban Climate Intelligence Platform
  * Core TypeScript Schema Definitions
  * File: src/types/index.ts
  */

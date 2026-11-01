@@ -1,4 +1,4 @@
-# HeatLens × Microsoft Imagine Cup 2026
+# HeatLens — Urban Climate Intelligence Platform
 # BACKEND — AZURE FUNCTIONS SKELETON
 # File: backend/azure_functions/satellite_ingest/__init__.py
 # =============================================================

@@ -1,5 +1,5 @@
 /**
- * HeatLens × Microsoft Imagine Cup 2026
+ * HeatLens — Urban Climate Intelligence Platform
  * Delhi NCR Ward Telemetry Ground-Truth Engine
  * File: src/data/mockWards.ts
  */

@@ -1,5 +1,5 @@
 /**
- * HeatLens × Microsoft Imagine Cup 2026
+ * HeatLens — Urban Climate Intelligence Platform
  * Delhi NCR Administrative Ward Polygonal GeoJSON Engine
  * File: src/data/delhiGeoJson.ts
  *

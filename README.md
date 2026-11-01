@@ -1,6 +1,6 @@
-# HeatLens × Microsoft Imagine Cup 2026
+# HeatLens — Urban Climate Intelligence Platform
 ### Autonomous Geospatial AI Platform for Urban Heat Island Equity
-**Track:** EARTH (Environmental Sustainability & Climate AI)  
+**Category:** Environmental Sustainability & Climate AI  
 **Lead Researcher & Developer:** Rohit Singh (ABES Engineering College, AKTU)  
 **Live Platform:** [heat-lens-ecobuilders.vercel.app](https://heat-lens-ecobuilders.vercel.app/)  
 **HuggingFace Oracle:** [heatlens-satellite-lst-oracle](https://huggingface.co/spaces/rohitsinghudi1372008/heatlens-satellite-lst-oracle)  
@@ -103,4 +103,4 @@ See `backend/.env.example` and `frontend/.env.example` for reference.
 ---
 
 ## 📜 License
-MIT License. Built for **Microsoft Imagine Cup 2026**.
+MIT License. Built for **Advanced Climate Intelligence & Urban Heat Resilience Hackathons**.

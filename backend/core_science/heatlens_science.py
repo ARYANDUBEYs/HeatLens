@@ -1,4 +1,4 @@
-# HeatLens × Microsoft Imagine Cup 2026
+# HeatLens — Urban Climate Intelligence Platform
 # CORE SCIENCE — VALIDATED MATHEMATICAL MODELS
 # File: backend/core_science/heatlens_science.py
 # =============================================================

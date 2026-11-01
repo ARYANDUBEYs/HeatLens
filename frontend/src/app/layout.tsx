@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "HeatLens — Climate Intelligence & Street-Level Heat Equity",
   description:
-    "Microsoft Imagine Cup 2026 (Earth Track) — Satellite-driven urban heat island equity and cooling infrastructure optimization for Delhi NCR.",
+    "Satellite-driven urban heat island equity, thermal telemetry analysis, and cooling infrastructure optimization for Delhi NCR.",
 };
 
 export default function RootLayout({

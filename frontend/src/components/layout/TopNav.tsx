@@ -11,7 +11,7 @@ export function TopNav() {
     <header className="sticky top-0 z-50 h-16 w-full border-b border-border bg-surface-white px-4 md:px-6 shadow-sm">
       <div className="flex h-full items-center justify-between gap-4">
         
-        {/* Left: Brand & Imagine Cup Edition */}
+        {/* Left: Brand & Climate Edition */}
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-azure-soft text-azure-primary shadow-sm border border-sky-200">
             <Flame className="h-5 w-5 fill-azure-primary text-azure-primary" />
@@ -22,11 +22,11 @@ export function TopNav() {
                 HeatLens
               </span>
               <span className="inline-flex items-center rounded-md bg-azure-soft px-2 py-0.5 text-[11px] font-semibold text-azure-primary border border-sky-200">
-                Earth Track
+                Climate Intelligence
               </span>
             </div>
             <span className="text-xs font-medium text-text-secondary">
-              Microsoft Imagine Cup 2026 Edition
+              Urban Heat Equity &amp; Resilience Platform
             </span>
           </div>
         </div>

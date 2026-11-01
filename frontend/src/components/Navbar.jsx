@@ -19,13 +19,13 @@ export default function Navbar({ onOpenScience, azureStatus }) {
                 HeatLens
               </h1>
               <span className="px-2 py-0.5 text-[10px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full">
-                Imagine Cup '26
+                Climate AI
               </span>
             </div>
             <p className="text-xs text-slate-400 flex items-center gap-1.5">
               <span>Geospatial AI for Urban Heat Equity</span>
               <span className="inline-block w-1 h-1 rounded-full bg-slate-600"></span>
-              <span className="text-sky-400 font-medium">Earth Track</span>
+              <span className="text-sky-400 font-medium">Urban Resilience</span>
             </p>
           </div>
         </div>

@@ -1,4 +1,4 @@
-# HeatLens × Microsoft Imagine Cup 2026
+# HeatLens — Urban Climate Intelligence Platform
 # BACKEND — AZURE OPENAI FUNCTION CALLING SERVICE
 # File: backend/services/azure_openai_service.py
 # =============================================================

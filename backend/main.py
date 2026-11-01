@@ -1,5 +1,5 @@
 """
-HeatLens - Microsoft Imagine Cup 2026
+HeatLens - Urban Climate Intelligence Platform
 Unified Azure Backend & Geospatial AI API Gateway
 File: backend/main.py
 """
@@ -24,7 +24,7 @@ logger = logging.getLogger("HeatLensBackend")
 # Initialize FastAPI application
 app = FastAPI(
     title="HeatLens Geospatial AI API",
-    description="Backend API for Microsoft Imagine Cup 2026 - Earth Track",
+    description="Backend API for Urban Heat Island Equity & Climate Intelligence",
     version="1.0.0"
 )
 
@@ -300,8 +300,8 @@ def health_check():
         "service": "HeatLens Geospatial Backend",
         "azure_openai_configured": azure_openai_client is not None,
         "region": "Central India",
-        "competition": "Microsoft Imagine Cup 2026",
-        "track": "Earth (Environmental Sustainability & Climate AI)"
+        "edition": "Climate AI & Urban Heat Equity",
+        "domain": "Environmental Sustainability & Climate AI"
     }
 
 @app.get("/api/stats")
