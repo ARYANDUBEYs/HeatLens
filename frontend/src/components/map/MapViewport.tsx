@@ -130,7 +130,7 @@ export function MapViewport({
       </div>
 
       {/* Interactive Map Surface */}
-      <div className="relative w-full h-full min-h-[400px] flex-1">
+      <div className="relative w-full h-full flex-1 self-stretch overflow-hidden">
         {viewEngine === "vector" ? (
           <VectorMapFallback
             activeLayer={activeLayer}

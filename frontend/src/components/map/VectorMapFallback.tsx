@@ -21,8 +21,8 @@ export function VectorMapFallback({
   const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // Bounding box for Delhi NCR municipal ward extents
-  const minLng = 77.01;
-  const maxLng = 77.36;
+  const minLng = 76.95;
+  const maxLng = 77.34;
   const minLat = 28.50;
   const maxLat = 28.74;
 
@@ -30,8 +30,8 @@ export function VectorMapFallback({
   const height = 650;
 
   const project = (lng: number, lat: number): [number, number] => {
-    const x = ((lng - minLng) / (maxLng - minLng)) * (width - 120) + 60;
-    const y = (1 - (lat - minLat) / (maxLat - minLat)) * (height - 100) + 50;
+    const x = ((lng - minLng) / (maxLng - minLng)) * (width - 140) + 70;
+    const y = (1 - (lat - minLat) / (maxLat - minLat)) * (height - 120) + 60;
     return [Math.round(x * 10) / 10, Math.round(y * 10) / 10];
   };
 
@@ -81,7 +81,7 @@ export function VectorMapFallback({
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center bg-canvas overflow-hidden select-none p-4"
+      className="absolute inset-0 w-full h-full flex items-center justify-center bg-canvas overflow-hidden select-none p-4"
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });

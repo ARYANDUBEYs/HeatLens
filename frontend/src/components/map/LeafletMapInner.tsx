@@ -38,9 +38,17 @@ function MapResizer() {
       } catch (_) {}
     }, 600);
 
+    const handleResize = () => {
+      try {
+        map.invalidateSize();
+      } catch (_) {}
+    };
+    window.addEventListener("resize", handleResize);
+
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      window.removeEventListener("resize", handleResize);
     };
   }, [map]);
 
@@ -215,7 +223,7 @@ export default function LeafletMapInner({
   );
 
   return (
-    <div className="relative w-full h-full min-h-[400px] flex-1">
+    <div className="absolute inset-0 w-full h-full overflow-hidden">
       <MapContainer
         center={centerPosition}
         zoom={11}
@@ -223,8 +231,8 @@ export default function LeafletMapInner({
         maxZoom={15}
         scrollWheelZoom={true}
         zoomControl={false}
-        style={{ height: "100%", width: "100%", minHeight: "100%" }}
-        className="w-full h-full min-h-[400px] z-0"
+        style={{ height: "100%", width: "100%", position: "absolute", inset: 0 }}
+        className="w-full h-full z-0"
       >
         <ZoomControl position="bottomleft" />
         
