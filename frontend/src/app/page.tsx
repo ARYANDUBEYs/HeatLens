@@ -1,22 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MapViewport } from "@/components/map/MapViewport";
-import { MapMetricLayer } from "@/types";
+import { WardDetailModal } from "@/components/analytics/WardDetailModal";
+import { MapMetricLayer, WardMetrics } from "@/types";
+import { getMockWardById, mockWards } from "@/data/mockWards";
 
 export default function HomePage() {
   const [selectedWardId, setSelectedWardId] = useState<string | null>("DEL-001");
   const [activeLayer, setActiveLayer] = useState<MapMetricLayer>("priority");
+  const [isDetailDrawerOpen, setIsDetailDrawerOpen] = useState(false);
+
+  const selectedWard = useMemo(
+    () => (selectedWardId ? getMockWardById(selectedWardId) ?? null : null),
+    [selectedWardId]
+  );
+
+  const handleSelectWard = (id: string) => {
+    setSelectedWardId(id);
+    setIsDetailDrawerOpen(true);
+  };
 
   return (
-    <main className="flex-1 h-[calc(100vh-4rem)] flex overflow-hidden bg-canvas">
+    <main className="flex-1 h-[calc(100vh-4rem)] flex overflow-hidden bg-canvas relative">
       {/* ─────────────────────────────────────────────────────────────
           LEFT COLUMN: 420px Fixed Width Control & AI Decision Suite
           ───────────────────────────────────────────────────────────── */}
       <Sidebar
         selectedWardId={selectedWardId}
-        onSelectWard={(id) => setSelectedWardId(id)}
+        onSelectWard={handleSelectWard}
       />
 
       {/* ─────────────────────────────────────────────────────────────
@@ -25,11 +38,20 @@ export default function HomePage() {
       <section className="flex-1 h-full bg-canvas relative flex flex-col overflow-hidden">
         <MapViewport
           selectedWardId={selectedWardId}
-          onSelectWard={(id) => setSelectedWardId(id)}
+          onSelectWard={handleSelectWard}
           activeLayer={activeLayer}
           onLayerChange={setActiveLayer}
         />
       </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          SLIDE-OVER DRAWER: Ward Detailed Telemetry & 14-Day Chart
+          ───────────────────────────────────────────────────────────── */}
+      <WardDetailModal
+        ward={selectedWard}
+        isOpen={isDetailDrawerOpen}
+        onClose={() => setIsDetailDrawerOpen(false)}
+      />
     </main>
   );
 }
