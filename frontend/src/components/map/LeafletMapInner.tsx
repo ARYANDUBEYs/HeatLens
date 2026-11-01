@@ -18,6 +18,7 @@ interface LeafletMapInnerProps {
   activeLayer: MapMetricLayer;
   selectedWardId: string | null;
   onSelectWard: (wardId: string) => void;
+  basemapStyle?: "light" | "osm" | "satellite";
 }
 
 // Invalidate Leaflet map size on mount and container layout change
@@ -87,6 +88,7 @@ export default function LeafletMapInner({
   activeLayer,
   selectedWardId,
   onSelectWard,
+  basemapStyle = "light",
 }: LeafletMapInnerProps) {
   // Center of Delhi NCR
   const centerPosition: [number, number] = [28.6139, 77.2090];
@@ -236,13 +238,39 @@ export default function LeafletMapInner({
       >
         <ZoomControl position="bottomleft" />
         
-        {/* Crisp Light CartoDB Positron Basemap */}
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          subdomains="abcd"
-          maxZoom={19}
-        />
+        {/* Zero-Watermark High-Resolution Basemap Layers */}
+        {basemapStyle === "satellite" ? (
+          <TileLayer
+            key="satellite-base"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            attribution='&copy; <a href="https://www.esri.com/">Esri</a> &copy; NASA/USGS Landsat &copy; Copernicus'
+            maxZoom={18}
+          />
+        ) : basemapStyle === "osm" ? (
+          <TileLayer
+            key="osm-base"
+            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            maxZoom={19}
+          />
+        ) : (
+          <>
+            {/* Pristine Enterprise Light Gray Canvas (Zero Watermark / No API Key Required) */}
+            <TileLayer
+              key="light-gray-base"
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+              attribution='&copy; <a href="https://www.esri.com/">Esri</a> &copy; OpenStreetMap'
+              maxZoom={16}
+            />
+            {/* Crisp Reference Labels */}
+            <TileLayer
+              key="light-gray-labels"
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+              attribution=""
+              maxZoom={16}
+            />
+          </>
+        )}
 
         {/* Dynamic Choropleth Layer */}
         <GeoJSON

@@ -66,7 +66,7 @@ export function MapViewport({
 }: MapViewportProps) {
   // Local state if not controlled from parent
   const [internalLayer, setInternalLayer] = useState<MapMetricLayer>("priority");
-  const [viewEngine, setViewEngine] = useState<"cartodb" | "vector">("cartodb");
+  const [basemapStyle, setBasemapStyle] = useState<"light" | "osm" | "satellite" | "vector">("light");
 
   const activeLayer = externalActiveLayer ?? internalLayer;
   const handleLayerChange = externalOnLayerChange ?? setInternalLayer;
@@ -86,25 +86,47 @@ export function MapViewport({
             <span className="font-mono text-[11px] hidden sm:inline">28.61° N, 77.21° E</span>
           </div>
 
-          {/* View Engine Toggle */}
+          {/* Clean Watermark-Free Basemap Style Switcher */}
           <div className="rounded-xl border border-border bg-surface-white/95 backdrop-blur-md p-0.5 shadow-sm flex items-center">
             <button
-              onClick={() => setViewEngine("cartodb")}
-              title="CartoDB Positron Basemap Tile Engine"
+              onClick={() => setBasemapStyle("light")}
+              title="Enterprise Light GIS Canvas (Zero watermark / No API key required)"
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
-                viewEngine === "cartodb"
+                basemapStyle === "light"
                   ? "bg-azure-soft text-azure-primary shadow-xs"
                   : "text-text-secondary hover:text-text-primary"
               }`}
             >
               <Globe className="h-3 w-3" />
-              <span>Tiles</span>
+              <span>Light</span>
             </button>
             <button
-              onClick={() => setViewEngine("vector")}
+              onClick={() => setBasemapStyle("osm")}
+              title="OpenStreetMap Street Network (Zero watermark / No API key required)"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                basemapStyle === "osm"
+                  ? "bg-azure-soft text-azure-primary shadow-xs"
+                  : "text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              <span>Streets</span>
+            </button>
+            <button
+              onClick={() => setBasemapStyle("satellite")}
+              title="NASA Landsat & Sentinel Satellite True-Color Imagery"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                basemapStyle === "satellite"
+                  ? "bg-azure-soft text-azure-primary shadow-xs"
+                  : "text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              <span>Satellite</span>
+            </button>
+            <button
+              onClick={() => setBasemapStyle("vector")}
               title="High-Precision SVG Vector Grid Engine"
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
-                viewEngine === "vector"
+                basemapStyle === "vector"
                   ? "bg-azure-soft text-azure-primary shadow-xs"
                   : "text-text-secondary hover:text-text-primary"
               }`}
@@ -131,7 +153,7 @@ export function MapViewport({
 
       {/* Interactive Map Surface */}
       <div className="relative w-full h-full flex-1 self-stretch overflow-hidden">
-        {viewEngine === "vector" ? (
+        {basemapStyle === "vector" ? (
           <VectorMapFallback
             activeLayer={activeLayer}
             selectedWardId={selectedWardId}
@@ -151,6 +173,7 @@ export function MapViewport({
               activeLayer={activeLayer}
               selectedWardId={selectedWardId}
               onSelectWard={onSelectWard}
+              basemapStyle={basemapStyle}
             />
           </MapErrorBoundary>
         )}
