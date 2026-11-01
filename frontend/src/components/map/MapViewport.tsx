@@ -74,50 +74,54 @@ export function MapViewport({
   return (
     <div className="relative w-full h-full min-h-0 flex-1 flex flex-col overflow-hidden bg-canvas select-none">
       
-      {/* Floating Top-Left Coordinates & Engine Switcher Pill */}
-      <div className="absolute top-4 left-4 z-[1000] flex items-center gap-2 pointer-events-auto">
-        <div className="rounded-xl border border-border bg-surface-white/95 backdrop-blur-md px-3 py-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex items-center gap-2 text-xs font-medium text-text-secondary">
-          <Compass className="h-3.5 w-3.5 text-azure-primary shrink-0" />
-          <span className="font-semibold text-text-primary">Delhi NCR</span>
-          <span className="text-border">|</span>
-          <span className="font-mono text-[11px]">28.6139° N, 77.2090° E</span>
+      {/* Floating Responsive Top Control Bar (Prevents Overlapping) */}
+      <div className="absolute top-3 inset-x-3 z-[1000] flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+        
+        {/* Left Cluster: Coordinates & View Engine Switcher */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="rounded-xl border border-border bg-surface-white/95 backdrop-blur-md px-3 py-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex items-center gap-2 text-xs font-medium text-text-secondary">
+            <Compass className="h-3.5 w-3.5 text-azure-primary shrink-0" />
+            <span className="font-semibold text-text-primary">Delhi NCR</span>
+            <span className="text-border hidden sm:inline">|</span>
+            <span className="font-mono text-[11px] hidden sm:inline">28.61° N, 77.21° E</span>
+          </div>
+
+          {/* View Engine Toggle */}
+          <div className="rounded-xl border border-border bg-surface-white/95 backdrop-blur-md p-0.5 shadow-sm flex items-center">
+            <button
+              onClick={() => setViewEngine("cartodb")}
+              title="CartoDB Positron Basemap Tile Engine"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                viewEngine === "cartodb"
+                  ? "bg-azure-soft text-azure-primary shadow-xs"
+                  : "text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              <Globe className="h-3 w-3" />
+              <span>Tiles</span>
+            </button>
+            <button
+              onClick={() => setViewEngine("vector")}
+              title="High-Precision SVG Vector Grid Engine"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                viewEngine === "vector"
+                  ? "bg-azure-soft text-azure-primary shadow-xs"
+                  : "text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              <Layers className="h-3 w-3" />
+              <span>Vector</span>
+            </button>
+          </div>
         </div>
 
-        {/* View Engine Toggle */}
-        <div className="rounded-xl border border-border bg-surface-white/95 backdrop-blur-md p-0.5 shadow-sm flex items-center">
-          <button
-            onClick={() => setViewEngine("cartodb")}
-            title="CartoDB Positron Basemap Tile Engine"
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
-              viewEngine === "cartodb"
-                ? "bg-azure-soft text-azure-primary shadow-xs"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
-          >
-            <Globe className="h-3 w-3" />
-            <span>Tile Map</span>
-          </button>
-          <button
-            onClick={() => setViewEngine("vector")}
-            title="High-Precision SVG Vector Grid Engine"
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
-              viewEngine === "vector"
-                ? "bg-azure-soft text-azure-primary shadow-xs"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
-          >
-            <Layers className="h-3 w-3" />
-            <span>Vector Grid</span>
-          </button>
+        {/* Right Cluster: Metric Layer Selector */}
+        <div className="pointer-events-auto shrink-0">
+          <LayerToggle
+            activeLayer={activeLayer}
+            onLayerChange={handleLayerChange}
+          />
         </div>
-      </div>
-
-      {/* Floating Top-Right Layer Toggle Controls */}
-      <div className="absolute top-4 right-4 z-[1000] pointer-events-auto">
-        <LayerToggle
-          activeLayer={activeLayer}
-          onLayerChange={handleLayerChange}
-        />
       </div>
 
       {/* Floating Bottom-Right Metric Legend */}
