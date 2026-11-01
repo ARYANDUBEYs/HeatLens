@@ -65,9 +65,13 @@ body {
 
 /* Custom Leaflet Light-Mode Styling */
 .leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  min-height: 100% !important;
   background-color: #F8FAFC !important;
   font-family: inherit;
   outline: none;
+  z-index: 0;
 }
 
 .leaflet-bar {

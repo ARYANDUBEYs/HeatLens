@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
+import "leaflet/dist/leaflet.css";
+import React, { useMemo, useEffect, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -19,15 +20,55 @@ interface LeafletMapInnerProps {
   onSelectWard: (wardId: string) => void;
 }
 
-// Map center adjustment component on selection
-function MapController({ selectedWard }: { selectedWard?: WardMetrics }) {
+// Invalidate Leaflet map size on mount and container layout change
+function MapResizer() {
   const map = useMap();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Invalidate size across layout rendering passes
+    map.invalidateSize();
+    const t1 = setTimeout(() => {
+      try {
+        map.invalidateSize();
+      } catch (_) {}
+    }, 150);
+    const t2 = setTimeout(() => {
+      try {
+        map.invalidateSize();
+      } catch (_) {}
+    }, 600);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [map]);
+
+  return null;
+}
+
+// Map center adjustment component on selection with zero-size guards
+function MapController({ selectedWard }: { selectedWard?: WardMetrics }) {
+  const map = useMap();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     if (selectedWard && selectedWard.centerCoordinates) {
-      map.flyTo(selectedWard.centerCoordinates, 12.5, {
-        duration: 1.2,
-      });
+      try {
+        const size = map.getSize();
+        if (size && size.x > 0 && size.y > 0) {
+          map.flyTo(selectedWard.centerCoordinates, 12.5, {
+            duration: 1.2,
+          });
+        }
+      } catch (err) {
+        console.warn("[Leaflet MapController flyTo]:", err);
+      }
     }
   }, [selectedWard, map]);
 
@@ -174,7 +215,7 @@ export default function LeafletMapInner({
   );
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full min-h-[400px] flex-1">
       <MapContainer
         center={centerPosition}
         zoom={11}
@@ -182,7 +223,8 @@ export default function LeafletMapInner({
         maxZoom={15}
         scrollWheelZoom={true}
         zoomControl={false}
-        className="w-full h-full z-0"
+        style={{ height: "100%", width: "100%", minHeight: "100%" }}
+        className="w-full h-full min-h-[400px] z-0"
       >
         <ZoomControl position="bottomleft" />
         
@@ -201,6 +243,9 @@ export default function LeafletMapInner({
           style={styleFeature}
           onEachFeature={onEachFeature}
         />
+
+        {/* Dynamic Map Resizer & Size Invalidation */}
+        <MapResizer />
 
         {/* Camera controller for ward fly-to */}
         <MapController selectedWard={selectedWard} />

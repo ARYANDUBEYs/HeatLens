@@ -35,7 +35,7 @@ export default function HomePage() {
       {/* ─────────────────────────────────────────────────────────────
           RIGHT COLUMN: Flexible Viewport Interactive Geospatial Map
           ───────────────────────────────────────────────────────────── */}
-      <section className="flex-1 h-full bg-canvas relative flex flex-col overflow-hidden">
+      <section className="flex-1 min-w-0 min-h-0 h-full bg-canvas relative flex flex-col overflow-hidden">
         <MapViewport
           selectedWardId={selectedWardId}
           onSelectWard={handleSelectWard}
