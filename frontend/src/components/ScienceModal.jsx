@@ -38,7 +38,7 @@ export default function ScienceModal({ isOpen, onClose }) {
         <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-rose-400 font-bold text-sm">
             <Flame className="w-4 h-4" />
-            <span>1. Radiometric Surface Temperature Inversion (Planck's Law)</span>
+            <span>1. Radiometric Surface Temperature Inversion (Planck&apos;s Law)</span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed">
             Derived directly from Landsat-8/9 Thermal Infrared Sensor (TIRS) Band 10 @ 30m resolution with Sobrino fractional vegetation emissivity correction:

@@ -35,6 +35,7 @@ Click any question below or type your own query to evaluate urban heat vulnerabi
     if (prefilledPrompt) {
       handleSend(prefilledPrompt);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prefilledPrompt]);
 
   const handleSend = async (queryText) => {
