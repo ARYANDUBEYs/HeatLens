@@ -1,0 +1,115 @@
+# HeatLens × Microsoft Imagine Cup 2026
+# AZURE INTEGRATION PLAN — FULL TECHNICAL BLUEPRINT
+=============================================================
+
+## WHY AZURE INTEGRATION IS MANDATORY
+Microsoft Imagine Cup judges ARE Microsoft employees.
+Deep Azure usage = significant bonus points.
+Goal: Replace or augment every non-Azure component with Azure equivalents.
+
+=============================================================
+## PHASE 1: CORE AZURE SERVICES TO INTEGRATE (Priority Order)
+=============================================================
+
+### 1. Azure OpenAI Service (GPT-4o)
+   PURPOSE : Natural language interface for heat map queries
+   WHAT IT DOES:
+     - User types: "Show me the 10 hottest wards in Delhi in July 2025"
+     - Azure OpenAI parses intent → triggers satellite data query → returns visual map
+   IMPLEMENTATION:
+     - Use Azure OpenAI REST API with function calling
+     - Functions: get_ward_lst(ward_name), get_heat_ranking(date), compare_wards(list)
+     - Model: gpt-4o or gpt-4o-mini (cheaper for demo)
+   COST: ~$5-10/month for demo usage
+   JUDGE IMPACT: Very High ⭐⭐⭐⭐⭐
+
+### 2. Azure Maps (Replace Leaflet.js)
+   PURPOSE : Professional-grade geospatial visualization
+   WHAT IT DOES:
+     - Render ward-level heat vulnerability choropleth maps
+     - Overlay satellite thermal raster on Azure Maps tiles
+     - Enable ward boundary polygon rendering with heat score colors
+   IMPLEMENTATION:
+     - npm install azure-maps-control
+     - Replace Leaflet map initialization with Azure Maps Atlas control
+     - Use azure-maps-drawing-tools for interactive ward selection
+   COST: Free tier (25,000 map loads/month)
+   JUDGE IMPACT: Very High ⭐⭐⭐⭐⭐
+
+### 3. Azure Blob Storage
+   PURPOSE : Store satellite raster files (GeoTIFF, PNG tiles)
+   WHAT IT DOES:
+     - Replace Hugging Face Spaces file storage
+     - Store pre-processed LST rasters per city per month
+     - Serve via Azure CDN for <20ms global latency
+   IMPLEMENTATION:
+     - az storage account create
+     - Upload GeoTIFF files via Azure Storage SDK (Python)
+     - Generate SAS tokens for public read access
+   COST: ~$0.018/GB/month (negligible for demo)
+   JUDGE IMPACT: Medium ⭐⭐⭐
+
+### 4. Azure AI Vision (Custom Vision / Image Analysis)
+   PURPOSE : Satellite image classification and anomaly detection
+   WHAT IT DOES:
+     - Classify land use from Sentinel-2 imagery (vegetation vs concrete vs water)
+     - Detect urban heat island "hotspots" as image regions
+   IMPLEMENTATION:
+     - Use Azure Computer Vision 4.0 API for image segmentation
+     - OR train Custom Vision model on labeled satellite patches
+   COST: Free tier (5,000 calls/month)
+   JUDGE IMPACT: High ⭐⭐⭐⭐
+
+### 5. Azure Functions (Serverless Pipeline)
+   PURPOSE : Replace current FastAPI endpoints with serverless compute
+   WHAT IT DOES:
+     - Trigger satellite data ingestion on schedule (weekly LST updates)
+     - Process new Landsat scenes automatically when available
+     - HTTP trigger for on-demand ward analysis requests
+   IMPLEMENTATION:
+     - func init HeatLens --python
+     - func new --name SatelliteIngestTrigger --template "Timer trigger"
+   COST: Free tier (1M executions/month)
+   JUDGE IMPACT: High ⭐⭐⭐⭐
+
+=============================================================
+## PHASE 2: ADVANCED AZURE ADDITIONS (Bonus Points)
+=============================================================
+
+### 6. Azure Carbon Dashboard Integration
+   - Link LST data to estimated CO2 emissions per ward
+   - Show "carbon-heat correlation" for sustainability narrative
+   - API: Azure Sustainability Manager (preview)
+
+### 7. Azure Notification Hubs
+   - Send heat alert push notifications to registered municipalities
+   - "Ward 47 is projected to exceed 47°C next week — action required"
+
+### 8. Azure Cosmos DB
+   - Store historical heat vulnerability scores per ward per season
+   - Enable trend analysis ("Ward X has worsened by 3.2°C in 2 years")
+
+=============================================================
+## IMPLEMENTATION TIMELINE
+=============================================================
+
+Week 1: Azure Maps + Azure OpenAI natural language interface
+Week 2: Azure Blob Storage migration + Azure Functions pipeline
+Week 3: Azure AI Vision integration + Custom Vision training
+Week 4: Polish, demo video, Imagine Cup submission packaging
+
+=============================================================
+## AZURE RESOURCES TO CREATE
+=============================================================
+
+Resource Group : heatlens-imagine-cup-rg
+Location       : Central India (Mumbai) — for low latency demo
+Services       :
+  - heatlens-openai        (Azure OpenAI, GPT-4o)
+  - heatlens-maps          (Azure Maps Account)
+  - heatlens-storage       (Azure Blob Storage, LRS)
+  - heatlens-functions     (Azure Functions, Python 3.11)
+  - heatlens-vision        (Azure Computer Vision)
+
+Estimated Monthly Cost (Demo): ~$15-25/month
+With Azure for Students credit ($100 free): ZERO COST

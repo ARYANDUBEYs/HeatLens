@@ -1,0 +1,370 @@
+{
+  "city": "Delhi NCR",
+  "date": "2025-07",
+  "total_wards": 20,
+  "high_risk_count": 5,
+  "medium_risk_count": 8,
+  "low_risk_count": 7,
+  "wards": [
+    {
+      "ward_id": "DEL_005",
+      "ward_name": "Narela Industrial Area",
+      "zone": "North Delhi",
+      "coordinates": {
+        "lng": 77.098,
+        "lat": 28.852
+      },
+      "lst_celsius": 48.9,
+      "ndvi": 0.06,
+      "aqi": 320,
+      "population_density": 16000,
+      "vulnerable_pop_pct": 0.46,
+      "existing_cooling_centers": 0,
+      "vulnerability_score": 0.9648,
+      "risk_tier": "HIGH",
+      "recommended_cooling_centers": 3
+    },
+    {
+      "ward_id": "DEL_008",
+      "ward_name": "Okhla Industrial Area",
+      "zone": "South East Delhi",
+      "coordinates": {
+        "lng": 77.275,
+        "lat": 28.535
+      },
+      "lst_celsius": 49.1,
+      "ndvi": 0.05,
+      "aqi": 310,
+      "population_density": 24000,
+      "vulnerable_pop_pct": 0.44,
+      "existing_cooling_centers": 0,
+      "vulnerability_score": 0.9516,
+      "risk_tier": "HIGH",
+      "recommended_cooling_centers": 3
+    },
+    {
+      "ward_id": "DEL_006",
+      "ward_name": "Anand Vihar",
+      "zone": "East Delhi",
+      "coordinates": {
+        "lng": 77.315,
+        "lat": 28.647
+      },
+      "lst_celsius": 48.2,
+      "ndvi": 0.09,
+      "aqi": 345,
+      "population_density": 29000,
+      "vulnerable_pop_pct": 0.39,
+      "existing_cooling_centers": 0,
+      "vulnerability_score": 0.9038,
+      "risk_tier": "HIGH",
+      "recommended_cooling_centers": 3
+    },
+    {
+      "ward_id": "DEL_002",
+      "ward_name": "Chandni Chowk",
+      "zone": "Central Delhi",
+      "coordinates": {
+        "lng": 77.23,
+        "lat": 28.6562
+      },
+      "lst_celsius": 47.6,
+      "ndvi": 0.08,
+      "aqi": 285,
+      "population_density": 34000,
+      "vulnerable_pop_pct": 0.42,
+      "existing_cooling_centers": 0,
+      "vulnerability_score": 0.8546,
+      "risk_tier": "HIGH",
+      "recommended_cooling_centers": 3
+    },
+    {
+      "ward_id": "DEL_014",
+      "ward_name": "Shahdara",
+      "zone": "North East Delhi",
+      "coordinates": {
+        "lng": 77.292,
+        "lat": 28.672
+      },
+      "lst_celsius": 46.8,
+      "ndvi": 0.11,
+      "aqi": 290,
+      "population_density": 31000,
+      "vulnerable_pop_pct": 0.4,
+      "existing_cooling_centers": 0,
+      "vulnerability_score": 0.8069,
+      "risk_tier": "HIGH",
+      "recommended_cooling_centers": 3
+    },
+    {
+      "ward_id": "DEL_003",
+      "ward_name": "Karol Bagh",
+      "zone": "Central Delhi",
+      "coordinates": {
+        "lng": 77.1895,
+        "lat": 28.6515
+      },
+      "lst_celsius": 45.9,
+      "ndvi": 0.14,
+      "aqi": 240,
+      "population_density": 27000,
+      "vulnerable_pop_pct": 0.35,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.6813,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_019",
+      "ward_name": "Sarita Vihar",
+      "zone": "South East Delhi",
+      "coordinates": {
+        "lng": 77.3,
+        "lat": 28.53
+      },
+      "lst_celsius": 45.2,
+      "ndvi": 0.17,
+      "aqi": 260,
+      "population_density": 21500,
+      "vulnerable_pop_pct": 0.34,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.6582,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_017",
+      "ward_name": "Lajpat Nagar",
+      "zone": "South Delhi",
+      "coordinates": {
+        "lng": 77.242,
+        "lat": 28.57
+      },
+      "lst_celsius": 44.2,
+      "ndvi": 0.19,
+      "aqi": 225,
+      "population_density": 26000,
+      "vulnerable_pop_pct": 0.31,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.5638,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_004",
+      "ward_name": "Rohini Sector 7",
+      "zone": "North West Delhi",
+      "coordinates": {
+        "lng": 77.113,
+        "lat": 28.7125
+      },
+      "lst_celsius": 44.5,
+      "ndvi": 0.25,
+      "aqi": 220,
+      "population_density": 21000,
+      "vulnerable_pop_pct": 0.31,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.5369,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_015",
+      "ward_name": "Najafgarh",
+      "zone": "South West Delhi",
+      "coordinates": {
+        "lng": 76.985,
+        "lat": 28.61
+      },
+      "lst_celsius": 44.0,
+      "ndvi": 0.29,
+      "aqi": 205,
+      "population_density": 9500,
+      "vulnerable_pop_pct": 0.33,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.5018,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_001",
+      "ward_name": "Connaught Place",
+      "zone": "New Delhi",
+      "coordinates": {
+        "lng": 77.2195,
+        "lat": 28.6315
+      },
+      "lst_celsius": 43.8,
+      "ndvi": 0.22,
+      "aqi": 210,
+      "population_density": 18500,
+      "vulnerable_pop_pct": 0.28,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.5009,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_012",
+      "ward_name": "Janakpuri",
+      "zone": "West Delhi",
+      "coordinates": {
+        "lng": 77.085,
+        "lat": 28.625
+      },
+      "lst_celsius": 43.4,
+      "ndvi": 0.24,
+      "aqi": 215,
+      "population_density": 22000,
+      "vulnerable_pop_pct": 0.3,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.4984,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_016",
+      "ward_name": "Punjabi Bagh",
+      "zone": "West Delhi",
+      "coordinates": {
+        "lng": 77.135,
+        "lat": 28.665
+      },
+      "lst_celsius": 43.0,
+      "ndvi": 0.28,
+      "aqi": 210,
+      "population_density": 20000,
+      "vulnerable_pop_pct": 0.27,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.4402,
+      "risk_tier": "MEDIUM",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_020",
+      "ward_name": "Alipur",
+      "zone": "North Delhi",
+      "coordinates": {
+        "lng": 77.135,
+        "lat": 28.8
+      },
+      "lst_celsius": 42.6,
+      "ndvi": 0.35,
+      "aqi": 190,
+      "population_density": 8500,
+      "vulnerable_pop_pct": 0.29,
+      "existing_cooling_centers": 1,
+      "vulnerability_score": 0.3878,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_007",
+      "ward_name": "Mayur Vihar Phase 1",
+      "zone": "East Delhi",
+      "coordinates": {
+        "lng": 77.295,
+        "lat": 28.605
+      },
+      "lst_celsius": 42.1,
+      "ndvi": 0.32,
+      "aqi": 195,
+      "population_density": 19500,
+      "vulnerable_pop_pct": 0.26,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.3722,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_011",
+      "ward_name": "Dwarka Sector 10",
+      "zone": "South West Delhi",
+      "coordinates": {
+        "lng": 77.058,
+        "lat": 28.582
+      },
+      "lst_celsius": 41.8,
+      "ndvi": 0.34,
+      "aqi": 180,
+      "population_density": 16500,
+      "vulnerable_pop_pct": 0.22,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.3102,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_018",
+      "ward_name": "Saket",
+      "zone": "South Delhi",
+      "coordinates": {
+        "lng": 77.215,
+        "lat": 28.52
+      },
+      "lst_celsius": 41.5,
+      "ndvi": 0.36,
+      "aqi": 185,
+      "population_density": 17000,
+      "vulnerable_pop_pct": 0.23,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.3034,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_013",
+      "ward_name": "Civil Lines",
+      "zone": "North Delhi",
+      "coordinates": {
+        "lng": 77.225,
+        "lat": 28.68
+      },
+      "lst_celsius": 39.5,
+      "ndvi": 0.44,
+      "aqi": 175,
+      "population_density": 13500,
+      "vulnerable_pop_pct": 0.21,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.1812,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_009",
+      "ward_name": "Hauz Khas & Green Park",
+      "zone": "South Delhi",
+      "coordinates": {
+        "lng": 77.202,
+        "lat": 28.552
+      },
+      "lst_celsius": 38.2,
+      "ndvi": 0.48,
+      "aqi": 160,
+      "population_density": 14000,
+      "vulnerable_pop_pct": 0.2,
+      "existing_cooling_centers": 3,
+      "vulnerability_score": 0.1017,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    },
+    {
+      "ward_id": "DEL_010",
+      "ward_name": "Vasant Kunj & Ridge",
+      "zone": "South West Delhi",
+      "coordinates": {
+        "lng": 77.155,
+        "lat": 28.525
+      },
+      "lst_celsius": 36.9,
+      "ndvi": 0.54,
+      "aqi": 140,
+      "population_density": 11000,
+      "vulnerable_pop_pct": 0.18,
+      "existing_cooling_centers": 2,
+      "vulnerability_score": 0.0,
+      "risk_tier": "LOW",
+      "recommended_cooling_centers": 0
+    }
+  ]
+}

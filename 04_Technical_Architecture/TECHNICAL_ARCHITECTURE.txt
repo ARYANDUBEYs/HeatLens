@@ -1,0 +1,114 @@
+# HeatLens × Microsoft Imagine Cup 2026
+# FULL TECHNICAL ARCHITECTURE
+=============================================================
+
+## CURRENT ARCHITECTURE (Pre-Azure)
+=============================================================
+
+[DATA SOURCES]
+  NASA EarthData → Landsat-8/9 TIRS (Band 10, 30m resolution)
+  ESA Copernicus → Sentinel-2 MSI (NDVI bands, 10m resolution)
+         ↓
+[INGESTION PIPELINE] (Python)
+  - rasterio for GeoTIFF parsing
+  - numpy for radiometric calibration
+  - Planck's Law inversion: LST = K2 / ln(K1/L_λ + 1) - 273.15
+  - FVC = ((NDVI - NDVI_min) / (NDVI_max - NDVI_min))²
+  - Emissivity correction: ε = 0.004 * FVC + 0.986
+         ↓
+[SCORING ENGINE] (Python)
+  - AHP Decision Matrix (Saaty CR = 0.023)
+  - Priority Index: P = 0.35(LST) + 0.25(1-NDVI) + 0.20(AQI) + 0.20(Risk)
+  - 1,000-trial Monte Carlo stability verification (r_s = 0.982, p < 0.001)
+         ↓
+[FRONTEND] (React 18 + Next.js + Leaflet.js)
+  - Choropleth ward-level heat map
+  - Interactive ward selection & comparison
+         ↓
+[DEPLOYMENT]
+  - Vercel (Frontend)
+  - Hugging Face Spaces (Model inference sandbox)
+
+=============================================================
+## TARGET ARCHITECTURE (Post-Azure / Imagine Cup Version)
+=============================================================
+
+[DATA SOURCES]
+  NASA EarthData + ESA Copernicus (unchanged)
+         ↓
+[AZURE FUNCTIONS — Satellite Ingestion Pipeline]
+  - Timer Trigger: Weekly automated Landsat/Sentinel-2 downloads
+  - HTTP Trigger: On-demand ward analysis requests
+  - Python 3.11 runtime, 512MB memory, 5-min timeout
+         ↓
+[AZURE BLOB STORAGE — Raster Data Lake]
+  - Container: raw-satellite/ (original GeoTIFF files)
+  - Container: processed-lst/ (calibrated LST rasters)
+  - Container: ward-scores/ (JSON vulnerability scores)
+  - CDN-enabled for global low-latency tile serving
+         ↓
+[PROCESSING ENGINE — Azure Functions]
+  - Planck's Law LST derivation (unchanged Python logic)
+  - AHP scoring matrix computation
+  - Output: ward_scores_{city}_{YYYY_MM}.json → Blob Storage
+         ↓
+[AZURE AI VISION — Satellite Image Classification]
+  - Classify land use per ward (vegetation, concrete, water, industrial)
+  - Detect urban heat hotspot regions via image segmentation
+  - Augment AHP score with land-use classification confidence
+         ↓
+[AZURE COSMOS DB — Historical Heat Database]
+  - Store ward vulnerability scores: {ward_id, date, lst, ndvi, score}
+  - Enable time-series trend queries
+  - Partition key: city_id, Row key: ward_id + date
+         ↓
+[AZURE OPENAI SERVICE (GPT-4o) — Natural Language Interface]
+  - System prompt: "You are HeatLens AI. You answer questions about 
+    urban heat vulnerability using ward-level satellite data."
+  - Function calling tools:
+    * get_ward_score(ward_name, date)
+    * get_top_k_hottest_wards(city, k, date)
+    * compare_wards(ward_list, date)
+    * get_trend(ward_name, start_date, end_date)
+  - Returns: Structured JSON → frontend renders on Azure Maps
+         ↓
+[AZURE MAPS — Geospatial Visualization]
+  - Replace Leaflet.js with Azure Maps Atlas JS SDK
+  - Ward boundary GeoJSON overlaid on Azure Maps tiles
+  - Heat vulnerability choropleth (green → yellow → red)
+  - Real-time ward selection → triggers Azure OpenAI query
+         ↓
+[FRONTEND — React 18 + Next.js]
+  - Azure Maps component (replaces Leaflet)
+  - Chat interface (Azure OpenAI streaming responses)
+  - Ward detail panel (historical trend chart via Recharts)
+         ↓
+[DEPLOYMENT]
+  - Vercel (Frontend, unchanged)
+  - Azure Functions (Backend, replacing current FastAPI)
+  - Azure Blob Storage (replacing Hugging Face file storage)
+
+=============================================================
+## DATA FLOW DIAGRAM (Text Representation)
+=============================================================
+
+  NASA/ESA Satellite → Azure Function (Ingest) → Azure Blob (Raw GeoTIFF)
+                                ↓
+                    Azure Function (Process) → Azure Blob (LST JSON)
+                                ↓
+              Azure Cosmos DB ← Ward Scores → Azure OpenAI (NL Queries)
+                                                      ↓
+                                             Azure Maps Frontend
+                                                      ↓
+                                              User (Municipality)
+
+=============================================================
+## KEY TECHNICAL METRICS TO MENTION IN DEMO
+=============================================================
+
+- Satellite Resolution: 10m per pixel (Sentinel-2 NDVI fusion)
+- Inference Latency: <50ms (Hugging Face Spaces model sandbox)
+- Statistical Validity: AHP Saaty CR = 0.023 (threshold: <0.1)
+- Stability: r_s = 0.982, p < 0.001 (1,000-trial Monte Carlo)
+- Coverage: 250+ Delhi NCR wards mapped
+- Temporal: Monthly LST updates available from 2013 (Landsat-8 launch)

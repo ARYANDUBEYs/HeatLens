@@ -1,0 +1,24 @@
+
+# Requirements for HeatLens Azure Backend
+# Install with: pip install -r requirements.txt
+
+# Azure SDK
+azure-functions==1.19.0
+azure-storage-blob==12.19.0
+azure-identity==1.16.0
+
+# AI / ML
+openai==1.35.0           # Azure OpenAI client
+numpy==1.26.4
+scipy==1.13.0
+rasterio==1.3.9          # GeoTIFF satellite data processing
+Pillow==10.3.0
+
+# API Framework
+fastapi==0.111.0
+uvicorn==0.30.1
+pydantic==2.7.1
+
+# Utilities
+python-dotenv==1.0.1     # Load .env variables
+httpx==0.27.0            # Async HTTP client
