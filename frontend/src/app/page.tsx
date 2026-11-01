@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useMemo } from "react";
 import {
   Layers,
   Sparkles,
@@ -7,11 +9,28 @@ import {
   ShieldCheck,
   Compass,
   Cpu,
-  BarChart3,
+  Thermometer,
+  Leaf,
+  Wind,
+  CheckCircle2,
   SlidersHorizontal,
 } from "lucide-react";
+import { MapViewport } from "@/components/map/MapViewport";
+import { MapMetricLayer } from "@/types";
+import { mockWards, getMockWardById } from "@/data/mockWards";
+import { getRiskColor } from "@/lib/formulas";
 
 export default function HomePage() {
+  const [selectedWardId, setSelectedWardId] = useState<string | null>("DEL-001");
+  const [activeLayer, setActiveLayer] = useState<MapMetricLayer>("priority");
+
+  const selectedWard = useMemo(
+    () => (selectedWardId ? getMockWardById(selectedWardId) : mockWards[0]),
+    [selectedWardId]
+  );
+
+  const selectedRisk = selectedWard ? getRiskColor(selectedWard.riskLevel) : null;
+
   return (
     <main className="flex-1 h-[calc(100vh-4rem)] flex overflow-hidden bg-canvas">
       
@@ -39,9 +58,148 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* Panel Body Skeleton */}
+        {/* Panel Body */}
         <div className="p-4 space-y-4 flex-1">
           
+          {/* Active Selected Ward Inspector Summary */}
+          {selectedWard && selectedRisk && (
+            <div className="rounded-xl border border-border bg-surface-white p-4 shadow-sm space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="font-mono text-[10px] font-semibold tracking-wider text-text-secondary uppercase">
+                    {selectedWard.id} • {selectedWard.zone}
+                  </span>
+                  <h3 className="text-base font-extrabold text-text-primary leading-tight mt-0.5">
+                    {selectedWard.name}
+                  </h3>
+                </div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${selectedRisk.badge}`}>
+                  {selectedWard.riskLevel} Risk
+                </span>
+              </div>
+
+              {/* 4-Tile Quick Telemetry Grid */}
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                
+                {/* LST */}
+                <div className="rounded-lg border border-border bg-surface-muted p-2.5">
+                  <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                    <Thermometer className="h-3.5 w-3.5 text-rose-500" />
+                    <span className="text-[11px] font-medium">Surface Temp</span>
+                  </div>
+                  <div className="text-sm font-bold font-mono text-text-primary">
+                    {selectedWard.lst.toFixed(1)}°C
+                  </div>
+                  <span className="text-[10px] text-text-secondary">Band 10 @30m</span>
+                </div>
+
+                {/* NDVI */}
+                <div className="rounded-lg border border-border bg-surface-muted p-2.5">
+                  <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                    <Leaf className="h-3.5 w-3.5 text-emerald-600" />
+                    <span className="text-[11px] font-medium">Vegetation</span>
+                  </div>
+                  <div className="text-sm font-bold font-mono text-text-primary">
+                    {selectedWard.ndvi.toFixed(2)}
+                  </div>
+                  <span className="text-[10px] text-text-secondary">FVC {(selectedWard.fvc * 100).toFixed(0)}%</span>
+                </div>
+
+                {/* AQI */}
+                <div className="rounded-lg border border-border bg-surface-muted p-2.5">
+                  <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                    <Wind className="h-3.5 w-3.5 text-amber-500" />
+                    <span className="text-[11px] font-medium">Air Quality</span>
+                  </div>
+                  <div className="text-sm font-bold font-mono text-text-primary">
+                    {selectedWard.aqi} AQI
+                  </div>
+                  <span className="text-[10px] text-text-secondary">PM2.5 Sensor</span>
+                </div>
+
+                {/* Priority */}
+                <div className="rounded-lg border border-border bg-surface-muted p-2.5">
+                  <div className="flex items-center gap-1.5 text-text-secondary mb-1">
+                    <Flame className="h-3.5 w-3.5 text-azure-primary" />
+                    <span className="text-[11px] font-medium">Priority Index</span>
+                  </div>
+                  <div className="text-sm font-bold font-mono text-text-primary">
+                    {(selectedWard.priorityScore * 100).toFixed(1)}%
+                  </div>
+                  <span className="text-[10px] text-text-secondary">Saaty AHP Model</span>
+                </div>
+
+              </div>
+
+              {/* Priority Bar Indicator */}
+              <div className="space-y-1 pt-1">
+                <div className="flex justify-between items-center text-[11px]">
+                  <span className="font-semibold text-text-secondary">AHP Composite Score:</span>
+                  <span className="font-mono font-bold text-text-primary">
+                    {(selectedWard.priorityScore * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{
+                      width: `${(selectedWard.priorityScore * 100).toFixed(1)}%`,
+                      backgroundColor: selectedRisk.fill,
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Recommended Actions Directives */}
+              <div className="pt-2 border-t border-border space-y-1.5">
+                <span className="text-[11px] font-bold text-text-secondary uppercase tracking-wider block">
+                  Action Directives ({selectedWard.recommendedActions.length})
+                </span>
+                <ul className="space-y-1.5">
+                  {selectedWard.recommendedActions.map((action, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-xs text-text-secondary leading-snug"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5 text-azure-primary shrink-0 mt-0.5" />
+                      <span>{action}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Ward Navigation Carousel */}
+          <div className="rounded-xl border border-border bg-surface-white p-3.5 space-y-2">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">
+              Quick Ward Selector
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {mockWards.map((w) => {
+                const isSelected = w.id === selectedWardId;
+                const risk = getRiskColor(w.riskLevel);
+                return (
+                  <button
+                    key={w.id}
+                    onClick={() => setSelectedWardId(w.id)}
+                    className={`text-xs px-2.5 py-1 rounded-lg font-medium transition-all flex items-center gap-1.5 border cursor-pointer ${
+                      isSelected
+                        ? "bg-azure-soft text-azure-primary border-sky-300 shadow-sm"
+                        : "bg-surface-muted text-text-secondary hover:text-text-primary hover:bg-slate-200/60 border-border"
+                    }`}
+                  >
+                    <span
+                      className="h-1.5 w-1.5 rounded-full shrink-0"
+                      style={{ backgroundColor: risk.fill }}
+                    />
+                    <span>{w.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Scientific Validation Pill */}
           <div className="rounded-xl border border-border bg-surface-muted p-3.5 panel-card-hover">
             <div className="flex items-center justify-between text-xs font-semibold text-text-primary mb-1.5">
@@ -61,67 +219,6 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Strict Light-Mode Heat Risk Palette Preview */}
-          <div className="rounded-xl border border-border bg-surface-white p-3.5 space-y-2.5">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider block">
-              Heat Risk Classification Tokens
-            </span>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              
-              {/* Low Risk */}
-              <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-muted p-2">
-                <span className="h-3 w-3 rounded-full bg-heat-low shrink-0 ring-2 ring-emerald-200"></span>
-                <div className="flex flex-col">
-                  <span className="font-bold text-text-primary text-[11px]">Low</span>
-                  <span className="font-mono text-[10px] text-text-secondary">&lt; 40% (#34D399)</span>
-                </div>
-              </div>
-
-              {/* Moderate Risk */}
-              <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-muted p-2">
-                <span className="h-3 w-3 rounded-full bg-heat-moderate shrink-0 ring-2 ring-amber-200"></span>
-                <div className="flex flex-col">
-                  <span className="font-bold text-text-primary text-[11px]">Moderate</span>
-                  <span className="font-mono text-[10px] text-text-secondary">40-70% (#FBBF24)</span>
-                </div>
-              </div>
-
-              {/* High Risk */}
-              <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-muted p-2">
-                <span className="h-3 w-3 rounded-full bg-heat-high shrink-0 ring-2 ring-orange-200"></span>
-                <div className="flex flex-col">
-                  <span className="font-bold text-text-primary text-[11px]">High</span>
-                  <span className="font-mono text-[10px] text-text-secondary">70-85% (#FB923C)</span>
-                </div>
-              </div>
-
-              {/* Critical Risk */}
-              <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-muted p-2">
-                <span className="h-3 w-3 rounded-full bg-heat-critical shrink-0 ring-2 ring-rose-200"></span>
-                <div className="flex flex-col">
-                  <span className="font-bold text-text-primary text-[11px]">Critical</span>
-                  <span className="font-mono text-[10px] text-text-secondary">&gt; 85% (#F43F5E)</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Reserved Shell: Upcoming Ward Inspector & Decision Assistant */}
-          <div className="rounded-xl border border-dashed border-border bg-surface-muted/60 p-5 text-center flex flex-col items-center justify-center space-y-2 min-h-[220px]">
-            <div className="h-10 w-10 rounded-xl bg-surface-white border border-border flex items-center justify-center text-azure-primary shadow-sm">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-text-primary">
-                Control &amp; AI Decision Panel
-              </h3>
-              <p className="text-[11px] text-text-secondary max-w-[280px]">
-                Ward inspector diagnostics, Planck LST telemetry gauge, and Azure OpenAI conversational interface will attach here in subsequent steps.
-              </p>
-            </div>
-          </div>
-
         </div>
 
         {/* Panel Footer */}
@@ -133,12 +230,12 @@ export default function HomePage() {
       </aside>
 
       {/* ─────────────────────────────────────────────────────────────
-          RIGHT COLUMN: Flexible Viewport Interactive Map Shell
+          RIGHT COLUMN: Flexible Viewport Interactive Map
           ───────────────────────────────────────────────────────────── */}
       <section className="flex-1 h-full bg-canvas relative flex flex-col overflow-hidden">
         
         {/* Viewport Top Bar */}
-        <div className="h-12 border-b border-border bg-surface-white px-4 flex items-center justify-between shrink-0">
+        <div className="h-12 border-b border-border bg-surface-white px-4 flex items-center justify-between shrink-0 z-10 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-text-primary">
               <Layers className="h-4 w-4 text-azure-primary" />
@@ -146,7 +243,7 @@ export default function HomePage() {
             </div>
             <span className="h-3.5 w-[1px] bg-border"></span>
             <span className="text-xs text-text-secondary font-mono">
-              250+ Administrative Zones • 50M+ Residents
+              10 Evaluated Wards • 50M+ Monitored Population
             </span>
           </div>
 
@@ -158,71 +255,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Viewport Canvas Skeleton */}
-        <div className="flex-1 relative bg-surface-muted/40 p-4 flex items-center justify-center">
-          
-          {/* Subtle Map Coordinate Grid Pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.4]"
-            style={{
-              backgroundImage: `radial-gradient(#CBD5E1 1px, transparent 1px)`,
-              backgroundSize: "24px 24px",
-            }}
+        {/* Interactive Map Viewport */}
+        <div className="flex-1 relative w-full h-full overflow-hidden">
+          <MapViewport
+            selectedWardId={selectedWardId}
+            onSelectWard={(id) => setSelectedWardId(id)}
+            activeLayer={activeLayer}
+            onLayerChange={setActiveLayer}
           />
-
-          {/* Reserved Map Viewport Shell Card */}
-          <div className="relative z-10 max-w-lg w-full rounded-2xl border border-border bg-surface-white p-6 shadow-sm text-center space-y-3">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-azure-soft text-azure-primary border border-sky-200">
-              <MapPin className="h-6 w-6" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-sm font-bold text-text-primary">
-                Interactive Geospatial Map Viewport
-              </h3>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                Dedicated container for the Azure Maps Atlas Web SDK choropleth layer, Planck radiometric LST overlays, and cooling center vector markers.
-              </p>
-            </div>
-            <div className="pt-2 flex items-center justify-center gap-2 text-[11px] font-mono text-text-secondary">
-              <span className="rounded bg-surface-muted px-2 py-0.5 border border-border">
-                Atlas Control v3.0
-              </span>
-              <span>•</span>
-              <span className="rounded bg-surface-muted px-2 py-0.5 border border-border">
-                GeoJSON FeatureCollection
-              </span>
-              <span>•</span>
-              <span className="rounded bg-surface-muted px-2 py-0.5 border border-border">
-                Choropleth Interpolation
-              </span>
-            </div>
-          </div>
-
-          {/* Floating Map Legend Skeleton Placeholder */}
-          <div className="absolute bottom-4 left-4 z-20 rounded-xl border border-border bg-surface-white/95 backdrop-blur-sm p-3 shadow-sm text-xs">
-            <span className="text-[11px] font-bold text-text-secondary block mb-1.5 uppercase tracking-wider">
-              Heat Vulnerability Scale
-            </span>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-heat-low"></span>
-                <span className="text-[11px] text-text-secondary">&lt; 40% Low</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-heat-moderate"></span>
-                <span className="text-[11px] text-text-secondary">40-70% Moderate</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-heat-high"></span>
-                <span className="text-[11px] text-text-secondary">70-85% High</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-heat-critical"></span>
-                <span className="text-[11px] text-text-secondary">&gt; 85% Critical</span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </section>

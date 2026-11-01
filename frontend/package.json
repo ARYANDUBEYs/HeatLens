@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.22",
+    "azure-maps-control": "^3.0.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.395.0",
     "next": "^14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "lucide-react": "^0.395.0",
-    "azure-maps-control": "^3.0.0"
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",

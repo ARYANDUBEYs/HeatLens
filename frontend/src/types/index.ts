@@ -6,6 +6,8 @@
 
 export type RiskLevel = 'Low' | 'Moderate' | 'High' | 'Critical';
 
+export type MapMetricLayer = 'priority' | 'lst' | 'ndvi' | 'aqi';
+
 export type DelhiZone =
   | 'East Delhi'
   | 'North-East Delhi'

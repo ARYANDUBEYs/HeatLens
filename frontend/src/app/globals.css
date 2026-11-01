@@ -1,3 +1,4 @@
+@import "leaflet/dist/leaflet.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -60,4 +61,54 @@ body {
 .panel-card-hover:hover {
   border-color: #CBD5E1;
   box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Custom Leaflet Light-Mode Styling */
+.leaflet-container {
+  background-color: #F8FAFC !important;
+  font-family: inherit;
+  outline: none;
+}
+
+.leaflet-bar {
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: #F1F5F9 !important;
+  color: #0284C7 !important;
+}
+
+/* Custom Tooltip */
+.leaflet-tooltip.heatlens-tooltip {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+  font-family: inherit;
+  font-size: 11px !important;
+}
+
+.leaflet-tooltip-top.heatlens-tooltip:before {
+  border-top-color: #FFFFFF !important;
+}
+.leaflet-tooltip-bottom.heatlens-tooltip:before {
+  border-bottom-color: #FFFFFF !important;
+}
+.leaflet-tooltip-left.heatlens-tooltip:before {
+  border-left-color: #FFFFFF !important;
+}
+.leaflet-tooltip-right.heatlens-tooltip:before {
+  border-right-color: #FFFFFF !important;
 }
