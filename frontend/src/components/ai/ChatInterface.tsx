@@ -59,8 +59,8 @@ export function ChatInterface({ onSelectWard }: ChatInterfaceProps) {
     scrollToBottom();
   }, [messages, isAnalyzing]);
 
-  // Simulated Azure OpenAI Function Calling Engine
-  const processQuery = (rawQuery: string) => {
+  // Azure OpenAI / Function Calling Engine
+  const processQuery = async (rawQuery: string) => {
     const q = rawQuery.trim();
     if (!q || isAnalyzing) return;
 
@@ -75,12 +75,41 @@ export function ChatInterface({ onSelectWard }: ChatInterfaceProps) {
     setInput("");
     setIsAnalyzing(true);
 
-    // Simulate Azure OpenAI latency and tool execution
-    setTimeout(() => {
+    try {
+      // Dispatch to Next.js Azure OpenAI API Route
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: q,
+          conversationHistory: messages.slice(-4).map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      const assistantResponse: Message = {
+        id: `asst-${Date.now()}`,
+        role: "assistant",
+        content: data.answer || "No response received.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        toolOutput: data.toolOutput || undefined,
+      };
+
+      setMessages((prev) => [...prev, assistantResponse]);
+    } catch (err) {
+      console.warn("[ChatInterface] /api/chat error, using fallback reasoning:", err);
+      // Fallback local intelligence
       const qLower = q.toLowerCase();
       let assistantResponse: Message;
 
-      // Scenario 1: Hydration Kiosks / East Delhi
       if (qLower.includes("hydration") || qLower.includes("kiosk") || qLower.includes("east delhi")) {
         assistantResponse = {
           id: `asst-${Date.now()}`,
@@ -95,9 +124,7 @@ export function ChatInterface({ onSelectWard }: ChatInterfaceProps) {
             actionLabel: "Highlight Seelampur & Shahdara on Map",
           },
         };
-      }
-      // Scenario 2: Canopy Deficit (NDVI < 0.12)
-      else if (qLower.includes("canopy") || qLower.includes("ndvi") || qLower.includes("deficit") || qLower.includes("tree")) {
+      } else if (qLower.includes("canopy") || qLower.includes("ndvi") || qLower.includes("deficit") || qLower.includes("tree")) {
         assistantResponse = {
           id: `asst-${Date.now()}`,
           role: "assistant",
@@ -111,9 +138,7 @@ export function ChatInterface({ onSelectWard }: ChatInterfaceProps) {
             actionLabel: "Highlight Severe Deficit Wards on Map",
           },
         };
-      }
-      // Scenario 3: Hindi Query
-      else if (
+      } else if (
         q.includes("गर्मी") ||
         q.includes("दिल्ली") ||
         q.includes("क्षेत्र") ||
@@ -134,14 +159,12 @@ export function ChatInterface({ onSelectWard }: ChatInterfaceProps) {
             actionLabel: "मानचित्र पर संवेदनशील वार्ड देखें (DEL-001)",
           },
         };
-      }
-      // Scenario 4: General or Specific Ward Query
-      else {
+      } else {
         assistantResponse = {
           id: `asst-${Date.now()}`,
           role: "assistant",
           content:
-            `### Microclimate Diagnostics & Policy Guidance\n\nQuery processed against 10 monitored Delhi NCR wards utilizing our Analytic Hierarchy Process (AHP Saaty CR = 0.023):\n\n- **Maximum Observed LST:** \`48.8°C\` (Okhla Phase 1)\n- **Minimum Observed LST:** \`38.6°C\` (Lodhi Estate & Chanakyapuri)\n- **Thermal Disparity:** \`+10.2°C\` localized gap between concrete traps and urban forest canopies.\n\nRecommended municipal action: Focus high-albedo coatings and mobile misting stations in wards exceeding **46°C** surface threshold.`,
+            "### Microclimate Diagnostics & Policy Guidance\n\nQuery processed against 10 monitored Delhi NCR wards utilizing our Analytic Hierarchy Process (AHP Saaty CR = 0.023):\n\n- **Maximum Observed LST:** `48.8°C` (Okhla Phase 1)\n- **Minimum Observed LST:** `38.6°C` (Lodhi Estate & Chanakyapuri)\n- **Thermal Disparity:** `+10.2°C` localized gap between concrete traps and urban forest canopies.\n\nRecommended municipal action: Focus high-albedo coatings and mobile misting stations in wards exceeding **46°C** surface threshold.",
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           toolOutput: {
             toolName: "evaluate_general_heat_metrics",
@@ -153,8 +176,9 @@ export function ChatInterface({ onSelectWard }: ChatInterfaceProps) {
       }
 
       setMessages((prev) => [...prev, assistantResponse]);
+    } finally {
       setIsAnalyzing(false);
-    }, 700);
+    }
   };
 
   const handleMicClick = () => {
